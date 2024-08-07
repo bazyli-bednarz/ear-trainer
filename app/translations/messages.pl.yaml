@@ -1,0 +1,14 @@
+ui:
+    page_header:
+        index: Ear trainer - aplikacja do kształcenia słuchu
+        courses:
+            index: Kursy
+            show: "%courseName%"
+    sidebar:
+        home:
+            label: Strona główna
+        courses:
+            label: Kursy
+            about: O kursach
+        ranking:
+            label: Ranking

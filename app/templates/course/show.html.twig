@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}</h1>
+{% endblock %}

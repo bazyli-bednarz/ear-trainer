@@ -1,0 +1,9 @@
+.main {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.navbar > .container-fluid {
+    max-width: 1430px;
+    margin: 0 auto;
+}

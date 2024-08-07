@@ -1,0 +1,54 @@
+{#
+parameters:
+- id: Page identifier.
+- icon: Icon class.
+- url_path: URL to link to.
+- label: Link label to display.
+- first_item_label: Optional label for first element in dropdown, redirecting to the same URL as the parent link.
+- dropdown[url_path, parameters, label]: Dropdown menu items. Ignore if menu link should not have dropdown.
+#}
+
+{% if dropdown is defined and dropdown|length %}
+    <li class="nav-item dropdown">
+        <a
+                class="nav-link dropdown-toggle{% if page_id is defined and page_id == id %} active{% endif %}"
+                {% if page_id is defined and page_id == id %} aria-current="page" {% endif %}
+                href="#"
+                id="{{ id }}-dropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            {% if icon is defined %}<i class="{{ icon }}"></i>{% endif %}
+            {% if label is defined %}{{ label|trans }}{% endif %}
+        </a>
+        <ul class="dropdown-menu bg-dark" aria-labelledby="{{ id }}-dropdown">
+            {% if first_item_label is defined %}
+                <li>
+                    <a
+                            class="dropdown-item text-white bg-dark"
+                            href="{% if url_path is defined %}{{ url(url_path) }}{% endif %}"
+                    >
+                        {{ first_item_label|trans }}
+                    </a>
+                </li>
+            {% endif %}
+            {% for item in dropdown %}
+                <li>
+                    <a class="dropdown-item text-white bg-dark" href="{{ url(item.url_path, item.url_parameters ) }}">
+                        {{ item.label|trans }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% else %}
+    <li class="nav-item">
+        <a
+                class="nav-link{% if page_id is defined and page_id == id %} active{% endif %}"
+                {% if page_id is defined and page_id == id %} aria-current="page" {% endif %}
+                href="{% if url_path is defined %}{{ url(url_path) }}{% endif %}">
+            {% if icon is defined %}<i class="{{ icon }}"></i>{% endif %}
+            {% if label is defined %}{{ label|trans }}{% endif %}
+        </a>
+    </li>
+{% endif %}

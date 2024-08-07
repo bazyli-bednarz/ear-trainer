@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Ear trainer</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                {% include "partials/_menu-link.html.twig" with {
+                    id: 'index',
+                    icon: 'bi bi-house-fill',
+                    url_path: 'index',
+                    label: 'ui.sidebar.home.label',
+                } only %}
+                {% set dropdown = [] %}
+                {% for item in courses %}
+                    {% set dropdown = dropdown|merge([{url_path: 'course_show', url_parameters: { 'slug': item.slug }, label: item.name}]) %}
+                {% endfor %}
+                {% include "partials/_menu-link.html.twig" with {
+                    id: 'courses',
+                    icon: 'bi bi-book-half',
+                    url_path: 'course_index',
+                    label: 'ui.sidebar.courses.label',
+                    first_item_label: 'ui.sidebar.courses.about',
+                    dropdown: dropdown,
+                } only %}
+                {% include "partials/_menu-link.html.twig" with {
+                    id: 'ranking',
+                    icon: 'bi bi-award',
+                    label: 'ui.sidebar.ranking.label',
+                } only %}
+            </ul>
+        </div>
+    </div>
+</nav>
