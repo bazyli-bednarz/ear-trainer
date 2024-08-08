@@ -8,10 +8,16 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @method Course|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Course|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Course[]    findAll()
+ * @method Course[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @extends ServiceEntityRepository<Course>
  */
 class CourseRepository extends ServiceEntityRepository
 {
+    const ALIAS = 'c';
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Course::class);
@@ -20,12 +26,12 @@ class CourseRepository extends ServiceEntityRepository
     public function queryAll(): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder()
-            ->select('c')
-            ->orderBy('c.createdAt', 'ASC');
+            ->select(self::ALIAS)
+            ->orderBy(sprintf("%s.createdAt", self::ALIAS), 'ASC');
     }
 
     private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
     {
-        return $queryBuilder ?? $this->createQueryBuilder('c');
+        return $queryBuilder ?? $this->createQueryBuilder(self::ALIAS);
     }
 }

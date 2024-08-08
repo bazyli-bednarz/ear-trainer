@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.courses.edit'|trans({'%name%': course.name}) }}
+{% endblock %}
+{% block body %}
+
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1>    {{ 'ui.page_header.courses.edit'|trans({'%name%': course.name}) }}</h1>
+
+        {% if back_to_list_path|default(false) %}
+            <a href="{{ url(back_to_list_path) }}" class="btn btn-link">
+                {{ 'ui.action.back_to_list.course'|trans }}
+            </a>
+        {% endif %}
+    </div>
+
+
+    {{ form_start(form) }}
+    {% if false == form.vars.valid %}
+        {% include 'partials/_single_alert_message.html.twig' with {
+            type: 'danger',
+            message: 'message.form_error'|trans,
+        } %}
+    {% endif %}
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.submit) }}
+        </div>
+    </div>
+
+
+    {{ form_end(form) }}
+{% endblock %}

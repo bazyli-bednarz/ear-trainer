@@ -22,6 +22,7 @@
             {% include "partials/admin/_menu.html.twig" %}
         {% endblock %}
         <main role="main" class="content container-fluid p-2 main bg-dark text-white">
+            {% include 'partials/_flash_messages.html.twig' %}
             {% block body %}
 
             {% endblock %}

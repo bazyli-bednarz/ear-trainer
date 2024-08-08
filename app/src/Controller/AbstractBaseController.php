@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractBaseController extends AbstractController
 {
     public function __construct(
-        private readonly CourseServiceInterface $courseService,
+        protected readonly CourseServiceInterface $courseService,
     )
     {
     }

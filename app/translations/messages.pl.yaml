@@ -4,6 +4,9 @@ ui:
         courses:
             index: Kursy
             show: "%courseName%"
+            create: Dodaj nowy kurs
+            edit: Edytuj kurs %name%
+            delete: Usunąć kurs %name%?
     sidebar:
         home:
             label: Strona główna
@@ -12,3 +15,24 @@ ui:
             about: O kursach
         ranking:
             label: Ranking
+    action:
+        back_to_list:
+            course: Wróć do listy kursów
+        save: Zapisz
+        add:
+            course: Dodaj kurs
+        edit:
+            course: Edytuj kurs
+        delete:
+            course: Usuń kurs
+    message:
+        created:
+            course: Kurs %name% został dodany
+        updated:
+            course: Kurs %name% został zaktualizowany
+        deleted:
+            course: Kurs %name% został usunięty
+        form_error: Wystąpił błąd przy wypełnianiu formularza.
+    course:
+        name: Nazwa
+        description: Opis

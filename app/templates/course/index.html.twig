@@ -5,5 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ 'ui.page_header.courses.index'|trans }}</h1>
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1>{{ 'ui.page_header.courses.index'|trans }}</h1>
+        <a href="{{ url('course_create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-square"></i>
+            {{ "ui.action.add.course"|trans }}
+        </a>
+    </div>
 {% endblock %}

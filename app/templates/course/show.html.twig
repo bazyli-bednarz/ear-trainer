@@ -5,5 +5,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}</h1>
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1>{{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}</h1>
+
+        <a href="{{ url('course_update', {'slug': course.slug}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i>
+            {{ "ui.action.edit.course"|trans }}
+        </a>
+
+        <a href="{{ url('course_delete', {'slug': course.slug}) }}" class="btn btn-danger">
+            <i class="bi bi-trash"></i>
+            {{ "ui.action.delete.course"|trans }}
+        </a>
+    </div>
+
+    {% if course.description %}
+        <p>{{ course.description }}</p>
+    {% endif %}
 {% endblock %}
