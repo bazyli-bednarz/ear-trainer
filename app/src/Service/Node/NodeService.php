@@ -7,7 +7,6 @@ use App\Entity\Node;
 use App\Repository\NodeRepository;
 use App\Dto\Node\CreateNodeDto;
 use App\Dto\Node\EditNodeDto;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 
 class NodeService implements NodeServiceInterface
@@ -75,15 +74,15 @@ class NodeService implements NodeServiceInterface
         $this->em->persist($node);
         $this->em->flush();
 
-        if (!$previousNode) {
+        if ($previousNode) {
+            $nextNode = $previousNode->getNextNode();
+            $nextNode?->setPreviousNode($node);
+            $node->setPreviousNode($previousNode);
+        } else {
             $firstNode = $this->getFirstNodeForCourse($course);
             if ($firstNode !== $node) {
                 $firstNode?->setPreviousNode($node);
             }
-        } else {
-            $nextNode = $previousNode->getNextNode();
-            $nextNode?->setPreviousNode($node);
-            $node->setPreviousNode($previousNode);
         }
 
         $this->em->flush();

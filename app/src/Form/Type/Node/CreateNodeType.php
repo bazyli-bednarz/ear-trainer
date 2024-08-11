@@ -71,9 +71,6 @@ class CreateNodeType extends AbstractType
                     'label' => 'ui.node.previousNode',
                     'required' => false,
                     'placeholder' => 'ui.node.firstNode',
-                    'attr' => [
-                        'class' => 'disabled',
-                    ],
                     'choices' => $this->nodeService->getNodesForCourse($options['course']),
                     'choice_label' => 'name',
                     'data' => $options['previousNode'],

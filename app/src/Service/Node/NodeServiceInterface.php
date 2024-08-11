@@ -9,6 +9,9 @@ use App\Entity\Node;
 
 interface NodeServiceInterface
 {
+
+    public function getFirstNodeForCourse(Course $course): ?Node;
+    public function getLastNodeForCourse(Course $course): ?Node;
     public function getNodesForCourse(Course $course): array;
 
     public function getNodesForCourseExceptGiven(Course $course, Node $node): array;

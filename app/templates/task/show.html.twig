@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.tasks.show'|trans({'%taskName%': task.name}) }}
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1>{{ 'ui.page_header.tasks.show'|trans({'%taskName%': task.name}) }} | {{ course.name }}</h1>
+
+        {#        <a href="{{ url('task_update', {'slug': course.slug, 'taskSlug': task.slug}) }}" class="btn btn-primary"> #}
+        {#            <i class="bi bi-pencil-square"></i> #}
+        {#            {{ "ui.action.edit.task"|trans }} #}
+        {#        </a> #}
+
+        {#        <a href="{{ url('task_delete', {'slug': course.slug, 'taskSlug': task.slug}) }}" class="btn btn-danger"> #}
+        {#            <i class="bi bi-trash"></i> #}
+        {#            {{ "ui.action.delete.task"|trans }} #}
+        {#        </a> #}
+    </div>
+
+    {% if task.description %}
+        <p class="mb-5">{{ task.description }}</p>
+    {% endif %}
+{% endblock %}

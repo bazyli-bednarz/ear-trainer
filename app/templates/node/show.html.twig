@@ -22,4 +22,61 @@
     {% if node.description %}
         <p class="mb-5">{{ node.description }}</p>
     {% endif %}
+
+
+    {% if tasks|length > 0 %}
+        <table class="tasks table table-striped table-dark">
+            <tbody>
+            {% for task in tasks %}
+                <tr class="task{% if loop.first %} first{% endif %}{% if loop.last %} last{% endif %}">
+                    <td>
+                        <a class="node-link"
+                           href="{{ url('task_show', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug }) }}"
+                        >
+                            <span class="task-name">{{ task.name }}</span>
+                        </a>
+                    </td>
+                    <td>
+                        {% if task.description %}
+                            <p class="task-description">{{ task.description }}</p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ ('ui.taskType.' ~ task.type.value)|trans }}
+                    </td>
+                    <td>
+                        <a
+                                {#                                href="{{ url('task_update', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}" #}
+                                class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            {{ "ui.action.edit.task"|trans }}
+                        </a>
+
+                        <a
+                                {#                               href="{{ url('task_delete', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}" #}
+                                class="btn btn-danger">
+                            <i class="bi bi-trash"></i>
+                            {{ "ui.action.delete.task"|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if taskTypes|length %}
+            <div class="container-fluid d-flex justify-content-center inject-new-task__wrapper">
+
+                {% for taskType in taskTypes %}
+
+                    <a class="inject-new-task"
+                       href="{{ url('task_create', {'slug': course.slug, 'nodeSlug': node.slug, 'type': taskType.type }) }}"><i
+                                class="bi bi-patch-plus-fill"></i>
+                    <div class="inject-new-task__tooltip">{{ taskType.label }}</div>
+                    </a>
+
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endif %}
 {% endblock %}

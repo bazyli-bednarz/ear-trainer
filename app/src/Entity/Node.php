@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use App\Entity\Task\AbstractTask;
 use App\Entity\Trait\IdTrait;
 use App\Entity\Trait\SluggableTrait;
 use App\Entity\Trait\TimestampableTrait;
 use App\Repository\NodeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NodeRepository::class)]
@@ -33,6 +36,17 @@ class Node
 
     #[ORM\OneToOne(targetEntity: self::class, mappedBy: 'previousNode', fetch: 'EAGER')]
     private ?self $nextNode = null;
+
+    /**
+     * @var Collection<int, AbstractTask>
+     */
+    #[ORM\OneToMany(targetEntity: AbstractTask::class, mappedBy: 'node', orphanRemoval: true)]
+    private Collection $tasks;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+    }
 
     public function getName(): ?string
     {
@@ -112,6 +126,36 @@ class Node
         }
 
         $this->nextNode = $nextNode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AbstractTask>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(AbstractTask $task): static
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setNode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(AbstractTask $task): static
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getNode() === $this) {
+                $task->setNode(null);
+            }
+        }
 
         return $this;
     }
