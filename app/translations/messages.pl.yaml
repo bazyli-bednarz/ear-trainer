@@ -11,6 +11,7 @@ ui:
             create: Dodaj lekcję do kursu %courseName%
             show: "%nodeName%"
             edit: Edytuj lekcję %name%
+            delete: Usunąć lekcję %name%?
     sidebar:
         home:
             label: Strona główna
@@ -40,6 +41,7 @@ ui:
             node: Lekcja %name% została zaktualizowana
         deleted:
             course: Kurs %name% został usunięty
+            node: Lekcja %name% została usunięta
         form_error: Wystąpił błąd przy wypełnianiu formularza.
     course:
         name: Nazwa

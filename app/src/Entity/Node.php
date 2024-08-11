@@ -27,10 +27,10 @@ class Node
     #[ORM\ManyToOne(inversedBy: 'nodes')]
     private ?Course $course = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, inversedBy: 'nextNode', cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\OneToOne(targetEntity: self::class, inversedBy: 'nextNode', fetch: 'EAGER')]
     private ?self $previousNode = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, mappedBy: 'previousNode', cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\OneToOne(targetEntity: self::class, mappedBy: 'previousNode', fetch: 'EAGER')]
     private ?self $nextNode = null;
 
     public function getName(): ?string

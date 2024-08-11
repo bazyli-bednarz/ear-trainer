@@ -13,7 +13,7 @@
             {{ "ui.action.edit.node"|trans }}
         </a>
 
-        <a href="{{ url('node_delete', {'slug': node.slug}) }}" class="btn btn-danger">
+        <a href="{{ url('node_delete', {'slug': course.slug, 'nodeSlug': node.slug}) }}" class="btn btn-danger">
             <i class="bi bi-trash"></i>
             {{ "ui.action.delete.node"|trans }}
         </a>

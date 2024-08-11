@@ -77,7 +77,9 @@ class NodeService implements NodeServiceInterface
 
         if (!$previousNode) {
             $firstNode = $this->getFirstNodeForCourse($course);
-            $firstNode?->setPreviousNode($node);
+            if ($firstNode !== $node) {
+                $firstNode?->setPreviousNode($node);
+            }
         } else {
             $nextNode = $previousNode->getNextNode();
             $nextNode?->setPreviousNode($node);
@@ -152,5 +154,27 @@ class NodeService implements NodeServiceInterface
         $this->em->flush();
 
         return $node;
+    }
+
+    public function delete(Node $node): void
+    {
+        $previousNodeId = $node->getPreviousNode()?->getId();
+        $nextNodeId = $node->getNextNode()?->getId();
+
+        $node->setPreviousNode(null);
+        $node->getPreviousNode()?->setNextNode(null);
+        $node->setNextNode(null);
+        $node->getNextNode()?->setPreviousNode(null);
+
+        $this->em->flush();
+
+        $previousNode = $this->nodeRepository->findOneBy(['id' => $previousNodeId]);
+        $nextNode =  $this->nodeRepository->findOneBy(['id' => $nextNodeId]);
+
+        $previousNode?->setNextNode($nextNode);
+        $nextNode?->setPreviousNode($previousNode);
+
+        $this->em->remove($node);
+        $this->em->flush();
     }
 }

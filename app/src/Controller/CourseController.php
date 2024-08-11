@@ -127,6 +127,49 @@ class CourseController extends AbstractBaseController
         );
     }
 
+    #[Route(
+        '/{slug}/{nodeSlug}/usun',
+        name: 'node_delete',
+        methods: ['GET', 'DELETE']
+    )]
+    public function deleteNode(
+        #[MapEntity(mapping: ['slug' => 'slug'])] Course $course,
+        #[MapEntity(mapping: ['nodeSlug' => 'slug'])] Node $node,
+        Request $request
+    ): Response
+    {
+        $form = $this->createForm(FormType::class, $node, [
+            'method' => 'DELETE',
+            'action' => $this->generateUrl('node_delete', [
+                'slug' => $course->getSlug(),
+                'nodeSlug' => $node->getSlug()
+            ]),
+        ]);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $deletedNodeName = $node->getName();
+            $this->nodeService->delete($node);
+
+            $this->addFlash(
+                'success',
+                $this->translator->trans('ui.message.deleted.node', ['%name%' => $deletedNodeName])
+            );
+
+            return $this->redirectToRoute('course_show', ['slug' => $course->getSlug()]);
+
+        }
+
+        return $this->render(
+            'node/delete.html.twig',
+            [
+                'form' => $form->createView(),
+                'node' => $node
+            ]
+        );
+    }
+
+
 
     #[Route(
         '/{slug}/edytuj',
@@ -162,6 +205,8 @@ class CourseController extends AbstractBaseController
         );
     }
 
+
+
     #[Route(
         '/{slug}/{nodeSlug}',
         name: 'node_show',
@@ -182,6 +227,7 @@ class CourseController extends AbstractBaseController
             ]
         );
     }
+
 
 
 

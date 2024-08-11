@@ -24,7 +24,6 @@
     {% endif %}
     {% if nodes|length > 0 %}
         <div class="nodes">
-
             {% for node in nodes %}
                 <div class="node{% if loop.first %} first{% endif %}{% if loop.last %} last{% endif %}">
                     {% if loop.first %}
@@ -52,5 +51,11 @@
 
         </div>
 
+    {% else %}
+        <div class="container-fluid d-flex justify-content-center">
+            <a class="inject-new-node inject-new-node--empty"
+               href="{{ url('node_create', {'slug': course.slug }) }}"><i
+                        class="bi bi-patch-plus-fill"></i></a>
+        </div>
     {% endif %}
 {% endblock %}

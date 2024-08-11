@@ -29,39 +29,6 @@ class NodeController extends AbstractBaseController
 
 
 
-    #[Route(
-        '/{slug}/usun',
-        name: 'node_delete',
-        methods: ['GET', 'DELETE']
-    )]
-    public function delete(Node $node, Request $request): Response
-    {
-        $form = $this->createForm(FormType::class, $node, [
-            'method' => 'DELETE',
-            'action' => $this->generateUrl('node_delete', ['slug' => $node->getSlug()]),
-        ]);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $deletedNodeName = $node->getName();
-            $this->nodeService->delete($node);
-
-            $this->addFlash(
-                'success',
-                $this->translator->trans('ui.message.deleted.node', ['%name%' => $deletedNodeName])
-            );
-
-            return $this->redirectToRoute('node_index');
-
-        }
-
-        return $this->render(
-            'node/delete.html.twig',
-            [
-                'form' => $form->createView(),
-                'node' => $node
-            ]
-        );    }
 
 
 }
