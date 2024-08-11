@@ -49,7 +49,7 @@ ui:
     node:
         name: Nazwa lekcji
         description: Krótki opis wyświetlany przy lekcji
-        icon: Klasy ikony (np. wg Bootstrap Icons)
+        icon: Klasy ikony (np. wg Bootstrap Icons, Font Awesome)
         course: Kurs
         previousNode: Poprzednia lekcja
         firstNode: (pierwsza lekcja)

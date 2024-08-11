@@ -205,64 +205,6 @@ class CourseController extends AbstractBaseController
         );
     }
 
-
-
-    #[Route(
-        '/{slug}/{nodeSlug}',
-        name: 'node_show',
-        methods: ['GET'])
-    ]
-    public function showNode(
-        #[MapEntity(mapping: ['slug' => 'slug'])] Course $course,
-        #[MapEntity(mapping: ['nodeSlug' => 'slug'])] Node $node,
-        Request $request
-    ): Response
-    {
-
-        return $this->render(
-            'node/show.html.twig',
-            [
-                'course' => $course,
-                'node' => $node,
-            ]
-        );
-    }
-
-
-
-
-    #[Route(
-        '/nowy',
-        name: 'course_create',
-        methods: ['GET', 'POST']
-)]
-    public function create(Request $request): Response
-    {
-        $form = $this->createForm(CreateCourseType::class, $dto = new CreateCourseDto());
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $dto = $form->getData();
-            $course = $this->courseService->create($dto);
-
-            $this->addFlash(
-                'success',
-                $this->translator->trans('ui.message.created.course', ['%name%' => $course->getName()])
-            );
-
-            return $this->redirectToRoute('course_show', ['slug' => $course->getSlug()]);
-        }
-
-        return $this->render(
-            'course/create.html.twig',
-            [
-                'back_to_list_path' => 'course_index',
-                'form' => $form->createView(),
-            ]
-        );
-    }
-
-
     #[Route(
         '/{slug}/usun',
         name: 'course_delete',
@@ -295,7 +237,60 @@ class CourseController extends AbstractBaseController
                 'form' => $form->createView(),
                 'course' => $course
             ]
-        );    }
+        );
+    }
+
+    #[Route(
+        '/{slug}/{nodeSlug}',
+        name: 'node_show',
+        methods: ['GET'])
+    ]
+    public function showNode(
+        #[MapEntity(mapping: ['slug' => 'slug'])] Course $course,
+        #[MapEntity(mapping: ['nodeSlug' => 'slug'])] Node $node,
+        Request $request
+    ): Response
+    {
+
+        return $this->render(
+            'node/show.html.twig',
+            [
+                'course' => $course,
+                'node' => $node,
+            ]
+        );
+    }
+
+    #[Route(
+        '/nowy',
+        name: 'course_create',
+        methods: ['GET', 'POST']
+)]
+    public function create(Request $request): Response
+    {
+        $form = $this->createForm(CreateCourseType::class, $dto = new CreateCourseDto());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $dto = $form->getData();
+            $course = $this->courseService->create($dto);
+
+            $this->addFlash(
+                'success',
+                $this->translator->trans('ui.message.created.course', ['%name%' => $course->getName()])
+            );
+
+            return $this->redirectToRoute('course_show', ['slug' => $course->getSlug()]);
+        }
+
+        return $this->render(
+            'course/create.html.twig',
+            [
+                'back_to_list_path' => 'course_index',
+                'form' => $form->createView(),
+            ]
+        );
+    }
 
     #[Route(
         '/{slug}',

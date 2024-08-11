@@ -31,7 +31,7 @@ class Course
     /**
      * @var Collection<int, Node>
      */
-    #[ORM\OneToMany(targetEntity: Node::class, mappedBy: 'course')]
+    #[ORM\OneToMany(targetEntity: Node::class, mappedBy: 'course', cascade: ['persist', 'remove'])]
     private Collection $nodes;
 
     public function __construct()

@@ -9,6 +9,7 @@ use App\Repository\NodeRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NodeRepository::class)]
+#[ORM\Table(name: 'nodes')]
 class Node
 {
     use IdTrait;
@@ -24,7 +25,7 @@ class Node
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'nodes')]
+    #[ORM\ManyToOne(inversedBy: 'nodes', targetEntity: Course::class)]
     private ?Course $course = null;
 
     #[ORM\OneToOne(targetEntity: self::class, inversedBy: 'nextNode', fetch: 'EAGER')]
