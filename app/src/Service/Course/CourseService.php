@@ -6,6 +6,7 @@ use App\Dto\Course\CourseMenuDto;
 use App\Dto\Course\CreateCourseDto;
 use App\Dto\Course\EditCourseDto;
 use App\Entity\Course;
+use App\Entity\Node;
 use App\Repository\CourseRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +30,11 @@ class CourseService implements CourseServiceInterface
         }
 
         return $data;
+    }
+
+    public function getById(int $id): ?Course
+    {
+        return $this->courseRepository->findOneBy(['id' => $id]);
     }
 
     public function create(CreateCourseDto $dto): Course

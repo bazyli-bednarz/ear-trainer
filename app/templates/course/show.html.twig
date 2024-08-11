@@ -20,6 +20,37 @@
     </div>
 
     {% if course.description %}
-        <p>{{ course.description }}</p>
+        <p class="mb-5">{{ course.description }}</p>
+    {% endif %}
+    {% if nodes|length > 0 %}
+        <div class="nodes">
+
+            {% for node in nodes %}
+                <div class="node{% if loop.first %} first{% endif %}{% if loop.last %} last{% endif %}">
+                    {% if loop.first %}
+                        <a class="inject-new-node inject-new-node--first"
+                           href="{{ url('node_create', {'slug': course.slug }) }}"><i
+                                    class="bi bi-patch-plus-fill"></i></a>
+                    {% endif %}
+                    <a class="node-link"
+                       href="{{ url('node_show', {'slug': course.slug, 'nodeSlug': node.slug}) }}"
+                    >
+                        <div class="node__inner custom-background-color custom-color">
+
+                            <h2>{{ node.name }}</h2>
+                            <i class="{{ node.icon }}"></i>
+                        </div>
+                        {% if node.description %}
+                            <p class="node-description">{{ node.description }}</p>
+                        {% endif %}
+                    </a>
+                    <a class="inject-new-node"
+                       href="{{ url('node_create', {'slug': course.slug, 'prevNodeId': node.id }) }}"><i
+                                class="bi bi-patch-plus-fill"></i></a>
+                </div>
+            {% endfor %}
+
+        </div>
+
     {% endif %}
 {% endblock %}

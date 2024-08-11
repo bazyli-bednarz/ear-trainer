@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.nodes.show'|trans({'%nodeName%': node.name}) }}
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1>{{ 'ui.page_header.nodes.show'|trans({'%nodeName%': node.name}) }} | {{ node.course.name }}</h1>
+
+        <a href="{{ url('node_update', {'slug': course.slug, 'nodeSlug': node.slug}) }}" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i>
+            {{ "ui.action.edit.node"|trans }}
+        </a>
+
+        <a href="{{ url('node_delete', {'slug': node.slug}) }}" class="btn btn-danger">
+            <i class="bi bi-trash"></i>
+            {{ "ui.action.delete.node"|trans }}
+        </a>
+    </div>
+
+    {% if node.description %}
+        <p class="mb-5">{{ node.description }}</p>
+    {% endif %}
+{% endblock %}

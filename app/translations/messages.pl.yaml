@@ -7,6 +7,10 @@ ui:
             create: Dodaj nowy kurs
             edit: Edytuj kurs %name%
             delete: Usunąć kurs %name%?
+        nodes:
+            create: Dodaj lekcję do kursu %courseName%
+            show: "%nodeName%"
+            edit: Edytuj lekcję %name%
     sidebar:
         home:
             label: Strona główna
@@ -23,16 +27,27 @@ ui:
             course: Dodaj kurs
         edit:
             course: Edytuj kurs
+            node: Edytuj lekcję
         delete:
             course: Usuń kurs
+            node: Usuń lekcję
     message:
         created:
             course: Kurs %name% został dodany
+            node: Lekcja %name% została dodana
         updated:
             course: Kurs %name% został zaktualizowany
+            node: Lekcja %name% została zaktualizowana
         deleted:
             course: Kurs %name% został usunięty
         form_error: Wystąpił błąd przy wypełnianiu formularza.
     course:
         name: Nazwa
         description: Opis
+    node:
+        name: Nazwa lekcji
+        description: Krótki opis wyświetlany przy lekcji
+        icon: Klasy ikony (np. wg Bootstrap Icons)
+        course: Kurs
+        previousNode: Poprzednia lekcja
+        firstNode: (pierwsza lekcja)

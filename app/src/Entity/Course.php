@@ -2,50 +2,41 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\IdTrait;
+use App\Entity\Trait\SluggableTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\CourseRepository;
-use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\Table(name: 'courses')]
 class Course
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    use IdTrait;
+    use TimestampableTrait;
+    use SluggableTrait;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Assert\Type(DateTimeImmutable::class)]
-    #[Assert\NotBlank]
-    #[Gedmo\Timestampable(on: 'create')]
-    private ?DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    #[Assert\Type(DateTimeImmutable::class)]
-    #[Assert\NotBlank]
-    #[Gedmo\Timestampable(on: 'update')]
-    private ?DateTimeImmutable $updatedAt = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    #[Gedmo\Slug(fields: ['name'])]
-    private ?string $slug = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    public function getId(): ?int
+    /**
+     * @var Collection<int, Node>
+     */
+    #[ORM\OneToMany(targetEntity: Node::class, mappedBy: 'course')]
+    private Collection $nodes;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->nodes = new ArrayCollection();
     }
 
     public function getName(): ?string
@@ -60,41 +51,6 @@ class Course
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
 
     public function getDescription(): ?string
     {
@@ -104,6 +60,36 @@ class Course
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Node>
+     */
+    public function getNodes(): Collection
+    {
+        return $this->nodes;
+    }
+
+    public function addNode(Node $node): static
+    {
+        if (!$this->nodes->contains($node)) {
+            $this->nodes->add($node);
+            $node->setCourse($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNode(Node $node): static
+    {
+        if ($this->nodes->removeElement($node)) {
+            // set the owning side to null (unless already changed)
+            if ($node->getCourse() === $this) {
+                $node->setCourse(null);
+            }
+        }
 
         return $this;
     }
