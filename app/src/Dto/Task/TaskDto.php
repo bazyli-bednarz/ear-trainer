@@ -4,8 +4,10 @@ namespace App\Dto\Task;
 
 use App\Entity\Course;
 use App\Entity\Enum\IntervalEnum;
+use App\Entity\Enum\InversionTypeEnum;
 use App\Entity\Enum\NoteEnum;
 use App\Entity\Enum\TaskTypeEnum;
+use App\Entity\Enum\ThreeNoteChordTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 
@@ -36,7 +38,9 @@ class TaskDto
     private ?bool $isFirstHarmonic = null;
     private ?bool $isSecondHarmonic = null;
     private ?IntervalEnum $intervalType = null;
-
+    private ?ThreeNoteChordTypeEnum $chord = null;
+    private ?InversionTypeEnum $inversion = null;
+    private ?bool $shouldStudentRecogniseInversion = null;
 
     public function getName(): string
     {
@@ -79,6 +83,11 @@ class TaskDto
     }
 
     public function getIsHarmonic(): ?bool
+    {
+        return $this->isHarmonic;
+    }
+
+    public function isHarmonic(): ?bool
     {
         return $this->isHarmonic;
     }
@@ -131,11 +140,6 @@ class TaskDto
     public function setSecondNote(?NoteEnum $secondNote): void
     {
         $this->secondNote = $secondNote;
-    }
-
-    public function isHarmonic(): ?bool
-    {
-        return $this->isHarmonic;
     }
 
     public function setHarmonic(?bool $isHarmonic): void
@@ -198,6 +202,36 @@ class TaskDto
         $this->type = $type;
     }
 
+    public function getChord(): ?ThreeNoteChordTypeEnum
+    {
+        return $this->chord;
+    }
+
+    public function setChord(?ThreeNoteChordTypeEnum $chord): void
+    {
+        $this->chord = $chord;
+    }
+
+    public function getInversion(): ?InversionTypeEnum
+    {
+        return $this->inversion;
+    }
+
+    public function setInversion(?InversionTypeEnum $inversion): void
+    {
+        $this->inversion = $inversion;
+    }
+
+    public function getShouldStudentRecogniseInversion(): ?bool
+    {
+        return $this->shouldStudentRecogniseInversion;
+    }
+
+    public function setShouldStudentRecogniseInversion(?bool $shouldStudentRecogniseInversion): void
+    {
+        $this->shouldStudentRecogniseInversion = $shouldStudentRecogniseInversion;
+    }
+
     public static function fromEntity(AbstractTask $task): self
     {
         $dto = new self($task->getType());
@@ -228,6 +262,13 @@ class TaskDto
                 $dto->setFirstNote($task->getFirstNote());
                 $dto->setIsHarmonic($task->isHarmonic());
                 $dto->setIntervalType($task->getIntervalType());
+                break;
+            case TaskTypeEnum::ThreeNoteChord:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setChord($task->getChord());
+                $dto->setInversion($task->getInversion());
+                $dto->setIsHarmonic($task->isHarmonic());
+                $dto->setShouldStudentRecogniseInversion($task->getShouldStudentRecogniseInversion());
                 break;
             default:
                 throw new \InvalidArgumentException('Invalid task type');

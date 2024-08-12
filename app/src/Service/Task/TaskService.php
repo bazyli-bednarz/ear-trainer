@@ -12,6 +12,7 @@ use App\Entity\Task\AbstractTask;
 use App\Entity\Task\Interval;
 use App\Entity\Task\IntervalChain;
 use App\Entity\Task\RelativePitchSound;
+use App\Entity\Task\ThreeNoteChord;
 use App\Entity\Task\TwoIntervals;
 use App\Repository\AbstractTaskRepository;
 use App\Repository\IntervalRepository;
@@ -85,6 +86,7 @@ class TaskService implements TaskServiceInterface
             TaskTypeEnum::Interval => $this->createInterval($dto),
             TaskTypeEnum::TwoIntervals => $this->createTwoIntervals($dto),
             TaskTypeEnum::IntervalChain => $this->createIntervalChain($dto),
+            TaskTypeEnum::ThreeNoteChord => $this->createThreeNoteChord($dto),
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -164,6 +166,21 @@ class TaskService implements TaskServiceInterface
         return $task;
     }
 
+    private function createThreeNoteChord(TaskDto $dto): ThreeNoteChord
+    {
+        $task = new ThreeNoteChord();
+        $task
+            ->setFirstNote($dto->getFirstNote())
+            ->setChord($dto->getChord())
+            ->setInversion($dto->getInversion())
+            ->setIsHarmonic($dto->isHarmonic())
+            ->setShouldStudentRecogniseInversion($dto->getShouldStudentRecogniseInversion())
+        ;
+
+        return $task;
+    }
+
+
     public function update(AbstractTask $task, TaskDto $dto): AbstractTask
     {
         $previousTask = $dto->getPreviousTask();
@@ -176,17 +193,20 @@ class TaskService implements TaskServiceInterface
 
         switch ($task->getType()) {
             case TaskTypeEnum::RelativePitchSound:
+                /** @var RelativePitchSound $task */
                 $task
                     ->setFirstNote($dto->getFirstNote())
                     ->setSecondNote($dto->getSecondNote());
                 break;
             case TaskTypeEnum::Interval:
+                /** @var Interval $task */
                 $task
                     ->setFirstNote($dto->getFirstNote())
                     ->setSecondNote($dto->getSecondNote())
                     ->setIsHarmonic($dto->isHarmonic());
                 break;
             case TaskTypeEnum::TwoIntervals:
+                /** @var TwoIntervals $task */
                 $task
                     ->setFirstNote($dto->getFirstNote())
                     ->setSecondNote($dto->getSecondNote())
@@ -196,10 +216,20 @@ class TaskService implements TaskServiceInterface
                     ->setIsSecondHarmonic($dto->isSecondHarmonic());
                 break;
             case TaskTypeEnum::IntervalChain:
-                $task
+                /** @var IntervalChain $task */
+            $task
                     ->setFirstNote($dto->getFirstNote())
                     ->setIsHarmonic($dto->isHarmonic())
                     ->setIntervalType($dto->getIntervalType());
+                break;
+            case TaskTypeEnum::ThreeNoteChord:
+                /** @var ThreeNoteChord $task */
+                $task
+                    ->setFirstNote($dto->getFirstNote())
+                    ->setChord($dto->getChord())
+                    ->setInversion($dto->getInversion())
+                    ->setIsHarmonic($dto->isHarmonic())
+                    ->setShouldStudentRecogniseInversion($dto->getShouldStudentRecogniseInversion());
                 break;
         }
 

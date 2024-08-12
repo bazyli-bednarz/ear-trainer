@@ -11,6 +11,7 @@ use App\Form\Type\Task\AbstractTaskType;
 use App\Form\Type\Task\IntervalChainType;
 use App\Form\Type\Task\IntervalType;
 use App\Form\Type\Task\RelativePitchSoundType;
+use App\Form\Type\Task\ThreeNoteChordType;
 use App\Form\Type\Task\TwoIntervalsType;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
@@ -62,6 +63,7 @@ class TaskController extends AbstractBaseController
             TaskTypeEnum::Interval => IntervalType::class,
             TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
             TaskTypeEnum::IntervalChain => IntervalChainType::class,
+            TaskTypeEnum::ThreeNoteChord => ThreeNoteChordType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -120,6 +122,7 @@ class TaskController extends AbstractBaseController
             TaskTypeEnum::Interval => IntervalType::class,
             TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
             TaskTypeEnum::IntervalChain => IntervalChainType::class,
+            TaskTypeEnum::ThreeNoteChord => ThreeNoteChordType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 

@@ -86,6 +86,8 @@ ui:
         isHarmonic: Czy dźwięki mają być grane równocześnie (harmonicznie)?
         isFirstHarmonic: Czy dźwięki w pierwszym interwale mają być grane równocześnie (harmonicznie)?
         isSecondHarmonic: Czy dźwięki w drugim interwale mają być grane równocześnie (harmonicznie)?
+        inversion: Przewrót
+        shouldStudentRecogniseInversion: Czy student ma rozpoznawać przewrót?
     taskType:
         RelativePitchSound: Relatywna wysokość dźwięku
         Interval: Interwał
@@ -153,4 +155,15 @@ ui:
         MinorFourteenth: Kwartdecyma mała
         MajorFourteenth: Kwartdecyma wielka
         PerfectFifteenth: Kwintdecyma czysta
+    threeNoteChordType:
+        Major: Durowy
+        Minor: Mollowy
+        Diminished: Zmniejszony
+        Augmented: Zwiększony
+    inversion:
+        NoInversion: Postać zasadnicza
+        FirstInversion: Pierwsza inwersja
+        SecondInversion: Druga inwersja
+        ThirdInversion: Trzecia inwersja
+
 

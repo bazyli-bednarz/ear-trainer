@@ -4,12 +4,15 @@ namespace App\DataFixtures;
 
 use App\Entity\Course;
 use App\Entity\Enum\IntervalEnum;
+use App\Entity\Enum\InversionTypeEnum;
 use App\Entity\Enum\NoteEnum;
+use App\Entity\Enum\ThreeNoteChordTypeEnum;
 use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\Interval;
 use App\Entity\Task\IntervalChain;
 use App\Entity\Task\RelativePitchSound;
+use App\Entity\Task\ThreeNoteChord;
 use App\Entity\Task\TwoIntervals;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -129,6 +132,36 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $task->setNode($this->getReference('node-intervals-Interwały - zaawansowane ćwiczenia'));
             $manager->persist($task);
             $this->addReference('task-interval-chain-' . $exampleIntervalChain[$index][0], $task);
+        }
+
+
+        $exampleThreeNoteChords = [
+            ['1. Rozpoznaj akord', 'Rozpoznaj zagrany akord!', NoteEnum::C4, ThreeNoteChordTypeEnum::Major, InversionTypeEnum::NoInversion, false, false, 20],
+            ['2. Rozpoznaj akord', 'Rozpoznaj zagrany akord!', NoteEnum::C4, ThreeNoteChordTypeEnum::Minor, InversionTypeEnum::NoInversion, false, false, 20],
+            ['3. Rozpoznaj akord', 'Rozpoznaj zagrany akord!', NoteEnum::C4, ThreeNoteChordTypeEnum::Diminished, InversionTypeEnum::NoInversion, false, false, 20],
+            ['4. Rozpoznaj akord', 'Rozpoznaj zagrany akord!', NoteEnum::C4, ThreeNoteChordTypeEnum::Augmented, InversionTypeEnum::NoInversion, false, false, 20],
+        ];
+
+        foreach ($exampleThreeNoteChords as $index => $exampleChord) {
+            $task = new ThreeNoteChord();
+            $task
+                ->setName($exampleChord[0])
+                ->setDescription($exampleChord[1])
+                ->setFirstNote($exampleChord[2])
+                ->setChord($exampleChord[3])
+                ->setInversion($exampleChord[4])
+                ->setIsHarmonic($exampleChord[5])
+                ->setShouldStudentRecogniseInversion($exampleChord[6])
+                ->setPoints($exampleChord[7])
+            ;
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-three-note-chord-' . $exampleThreeNoteChords[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-chords-Akordy trójdźwiękowe'));
+            $manager->persist($task);
+            $this->addReference('task-three-note-chord-' . $exampleThreeNoteChords[$index][0], $task);
         }
 
         $manager->flush();
