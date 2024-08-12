@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\DiscriminatorMap([
     'RelativePitchSound' => RelativePitchSound::class,
     'Interval' => Interval::class,
+    'TwoIntervals' => TwoIntervals::class,
 ])]
 abstract class AbstractTask
 {

@@ -10,6 +10,7 @@ use App\Entity\Task\AbstractTask;
 use App\Form\Type\Task\AbstractTaskType;
 use App\Form\Type\Task\IntervalType;
 use App\Form\Type\Task\RelativePitchSoundType;
+use App\Form\Type\Task\TwoIntervalsType;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
 use App\Service\Task\TaskServiceInterface;
@@ -58,6 +59,7 @@ class TaskController extends AbstractBaseController
         $formType = match ($type) {
             TaskTypeEnum::RelativePitchSound => RelativePitchSoundType::class,
             TaskTypeEnum::Interval => IntervalType::class,
+            TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -114,6 +116,7 @@ class TaskController extends AbstractBaseController
         $formType = match ($task->getType()) {
             TaskTypeEnum::RelativePitchSound => RelativePitchSoundType::class,
             TaskTypeEnum::Interval => IntervalType::class,
+            TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 

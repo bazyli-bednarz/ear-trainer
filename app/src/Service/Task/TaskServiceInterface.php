@@ -24,7 +24,7 @@ interface TaskServiceInterface
 
     public function create(TaskDto $dto, Node $node): AbstractTask;
 
-//    public function update(AbstractTask $task, EditNodeDto $dto): AbstractTask;
-//
+    public function update(AbstractTask $task, TaskDto $dto): AbstractTask;
+
     public function delete(AbstractTask $task): void;
 }

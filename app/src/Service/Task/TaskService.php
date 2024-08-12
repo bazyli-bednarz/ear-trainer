@@ -11,6 +11,7 @@ use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Entity\Task\Interval;
 use App\Entity\Task\RelativePitchSound;
+use App\Entity\Task\TwoIntervals;
 use App\Repository\AbstractTaskRepository;
 use App\Repository\IntervalRepository;
 use App\Repository\NodeRepository;
@@ -81,6 +82,7 @@ class TaskService implements TaskServiceInterface
         $task = match ($dto->getType()) {
             TaskTypeEnum::RelativePitchSound => $this->createRelativePitchSound($dto),
             TaskTypeEnum::Interval => $this->createInterval($dto),
+            TaskTypeEnum::TwoIntervals => $this->createTwoIntervals($dto),
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -133,6 +135,21 @@ class TaskService implements TaskServiceInterface
         return $task;
     }
 
+    private function createTwoIntervals(TaskDto $dto): TwoIntervals
+    {
+        $task = new TwoIntervals();
+        $task
+            ->setFirstNote($dto->getFirstNote())
+            ->setSecondNote($dto->getSecondNote())
+            ->setThirdNote($dto->getThirdNote())
+            ->setFourthNote($dto->getFourthNote())
+            ->setIsFirstHarmonic($dto->isFirstHarmonic())
+            ->setIsSecondHarmonic($dto->isSecondHarmonic())
+        ;
+
+        return $task;
+    }
+
     public function update(AbstractTask $task, TaskDto $dto): AbstractTask
     {
         $previousTask = $dto->getPreviousTask();
@@ -154,6 +171,15 @@ class TaskService implements TaskServiceInterface
                     ->setFirstNote($dto->getFirstNote())
                     ->setSecondNote($dto->getSecondNote())
                     ->setIsHarmonic($dto->isHarmonic());
+                break;
+            case TaskTypeEnum::TwoIntervals:
+                $task
+                    ->setFirstNote($dto->getFirstNote())
+                    ->setSecondNote($dto->getSecondNote())
+                    ->setThirdNote($dto->getThirdNote())
+                    ->setFourthNote($dto->getFourthNote())
+                    ->setIsFirstHarmonic($dto->isFirstHarmonic())
+                    ->setIsSecondHarmonic($dto->isSecondHarmonic());
                 break;
         }
 

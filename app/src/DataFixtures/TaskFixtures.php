@@ -4,9 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Course;
 use App\Entity\Enum\NoteEnum;
+use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\Interval;
 use App\Entity\Task\RelativePitchSound;
+use App\Entity\Task\TwoIntervals;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -66,6 +68,38 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $task->setNode($this->getReference('node-intervals-Interwały proste'));
             $manager->persist($task);
             $this->addReference('task-interval-' . $exampleIntervals[$index][0], $task);
+        }
+
+
+        $exampleTwoIntervals = [
+            ['1. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::G4, NoteEnum::C4, NoteEnum::E4, false, false, TwoIntervalsTypeEnum::Normal, 20],
+            ['2. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::C4,  NoteEnum::C4, NoteEnum::F4, false, true, TwoIntervalsTypeEnum::Normal, 20],
+            ['3. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::D4,  NoteEnum::D4, NoteEnum::DSharp4, false, true, TwoIntervalsTypeEnum::Normal, 20],
+            ['4. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::D4,  NoteEnum::D4, NoteEnum::DSharp4, true, false, TwoIntervalsTypeEnum::IntervalSquare, 20],
+        ];
+
+        foreach ($exampleTwoIntervals as $index => $exampleInterval) {
+            $task = new TwoIntervals();
+            $task
+                ->setName($exampleInterval[0])
+                ->setDescription($exampleInterval[1])
+                ->setFirstNote($exampleInterval[2])
+                ->setSecondNote($exampleInterval[3])
+                ->setThirdNote($exampleInterval[4])
+                ->setFourthNote($exampleInterval[5])
+                ->setIsFirstHarmonic($exampleInterval[6])
+                ->setIsSecondHarmonic($exampleInterval[7])
+                ->setTwoIntervalsTypeEnum($exampleInterval[8])
+                ->setPoints($exampleInterval[9])
+            ;
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-two-intervals-' . $exampleTwoIntervals[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-intervals-Interwały złożone'));
+            $manager->persist($task);
+            $this->addReference('task-two-intervals-' . $exampleTwoIntervals[$index][0], $task);
         }
 
         $manager->flush();

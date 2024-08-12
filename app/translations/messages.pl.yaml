@@ -84,6 +84,8 @@ ui:
         previousTask: Poprzednie zadanie
         firstTask: (pierwsze zadanie)
         isHarmonic: Czy dźwięki mają być grane równocześnie (harmonicznie)?
+        isFirstHarmonic: Czy dźwięki w pierwszym interwale mają być grane równocześnie (harmonicznie)?
+        isSecondHarmonic: Czy dźwięki w drugim interwale mają być grane równocześnie (harmonicznie)?
     taskType:
         RelativePitchSound: Relatywna wysokość dźwięku
         Interval: Interwał

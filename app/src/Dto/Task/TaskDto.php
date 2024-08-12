@@ -30,6 +30,11 @@ class TaskDto
     private ?NoteEnum $firstNote = null;
     private ?NoteEnum $secondNote = null;
     private ?bool $isHarmonic = null;
+    private ?NoteEnum $thirdNote = null;
+    private ?NoteEnum $fourthNote = null;
+    private ?bool $isFirstHarmonic = null;
+    private ?bool $isSecondHarmonic = null;
+
 
     public function getName(): string
     {
@@ -136,6 +141,46 @@ class TaskDto
         $this->isHarmonic = $isHarmonic;
     }
 
+    public function getThirdNote(): ?NoteEnum
+    {
+        return $this->thirdNote;
+    }
+
+    public function setThirdNote(?NoteEnum $thirdNote): void
+    {
+        $this->thirdNote = $thirdNote;
+    }
+
+    public function getFourthNote(): ?NoteEnum
+    {
+        return $this->fourthNote;
+    }
+
+    public function setFourthNote(?NoteEnum $fourthNote): void
+    {
+        $this->fourthNote = $fourthNote;
+    }
+
+    public function isFirstHarmonic(): ?bool
+    {
+        return $this->isFirstHarmonic;
+    }
+
+    public function setIsFirstHarmonic(?bool $isFirstHarmonic): void
+    {
+        $this->isFirstHarmonic = $isFirstHarmonic;
+    }
+
+    public function isSecondHarmonic(): ?bool
+    {
+        return $this->isSecondHarmonic;
+    }
+
+    public function setIsSecondHarmonic(?bool $isSecondHarmonic): void
+    {
+        $this->isSecondHarmonic = $isSecondHarmonic;
+    }
+
     public function setType(TaskTypeEnum $type): void
     {
         $this->type = $type;
@@ -158,6 +203,14 @@ class TaskDto
                 $dto->setFirstNote($task->getFirstNote());
                 $dto->setSecondNote($task->getSecondNote());
                 $dto->setIsHarmonic($task->isHarmonic());
+                break;
+            case TaskTypeEnum::TwoIntervals:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setSecondNote($task->getSecondNote());
+                $dto->setThirdNote($task->getThirdNote());
+                $dto->setFourthNote($task->getFourthNote());
+                $dto->setIsFirstHarmonic($task->isFirstHarmonic());
+                $dto->setIsSecondHarmonic($task->isSecondHarmonic());
                 break;
             default:
                 throw new \InvalidArgumentException('Invalid task type');
