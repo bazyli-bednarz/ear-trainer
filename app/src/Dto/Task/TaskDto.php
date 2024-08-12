@@ -8,7 +8,7 @@ use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 
-class CreateTaskDto
+class TaskDto
 {
     public function __construct(
         TaskTypeEnum $type,
@@ -139,5 +139,30 @@ class CreateTaskDto
     public function setType(TaskTypeEnum $type): void
     {
         $this->type = $type;
+    }
+
+    public static function fromEntity(AbstractTask $task): self
+    {
+        $dto = new self($task->getType());
+        $dto->setName($task->getName());
+        $dto->setDescription($task->getDescription());
+        $dto->setPoints($task->getPoints());
+        $dto->setPreviousTask($task->getPreviousTask());
+
+        switch ($task->getType()) {
+            case TaskTypeEnum::RelativePitchSound:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setSecondNote($task->getSecondNote());
+                break;
+            case TaskTypeEnum::Interval:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setSecondNote($task->getSecondNote());
+                $dto->setIsHarmonic($task->isHarmonic());
+                break;
+            default:
+                throw new \InvalidArgumentException('Invalid task type');
+        }
+
+        return $dto;
     }
 }

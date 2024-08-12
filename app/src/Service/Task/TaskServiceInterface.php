@@ -4,7 +4,7 @@ namespace App\Service\Task;
 
 use App\Dto\Node\CreateNodeDto;
 use App\Dto\Node\EditNodeDto;
-use App\Dto\Task\CreateTaskDto;
+use App\Dto\Task\TaskDto;
 use App\Dto\Task\CreateIntervalTaskDto;
 use App\Dto\Task\CreateRelativePitchSoundTaskDto;
 use App\Entity\Course;
@@ -22,9 +22,9 @@ interface TaskServiceInterface
 
     public function getById(int $id): ?AbstractTask;
 
-    public function create(CreateTaskDto $dto, Node $node): AbstractTask;
+    public function create(TaskDto $dto, Node $node): AbstractTask;
 
 //    public function update(AbstractTask $task, EditNodeDto $dto): AbstractTask;
 //
-//    public function delete(AbstractTask $task): void;
+    public function delete(AbstractTask $task): void;
 }

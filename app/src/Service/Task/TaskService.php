@@ -2,7 +2,7 @@
 
 namespace App\Service\Task;
 
-use App\Dto\Task\CreateTaskDto;
+use App\Dto\Task\TaskDto;
 use App\Dto\Task\CreateIntervalTaskDto;
 use App\Dto\Task\CreateRelativePitchSoundTaskDto;
 use App\Entity\Course;
@@ -76,7 +76,7 @@ class TaskService implements TaskServiceInterface
         return $this->abstractTaskRepository->find($id);
     }
 
-    public function create(CreateTaskDto $dto, Node $node): AbstractTask
+    public function create(TaskDto $dto, Node $node): AbstractTask
     {
         $task = match ($dto->getType()) {
             TaskTypeEnum::RelativePitchSound => $this->createRelativePitchSound($dto),
@@ -110,7 +110,7 @@ class TaskService implements TaskServiceInterface
         return $task;
     }
 
-    private function createRelativePitchSound(CreateTaskDto $dto): RelativePitchSound
+    private function createRelativePitchSound(TaskDto $dto): RelativePitchSound
     {
         $task = new RelativePitchSound();
         $task
@@ -121,7 +121,7 @@ class TaskService implements TaskServiceInterface
         return $task;
     }
 
-    private function createInterval(CreateTaskDto $dto): Interval
+    private function createInterval(TaskDto $dto): Interval
     {
         $task = new Interval();
         $task
@@ -133,13 +133,100 @@ class TaskService implements TaskServiceInterface
         return $task;
     }
 
-//    public function update(AbstractTask $task, EditNodeDto $dto): AbstractTask
-//    {
-//        // TODO: Implement update() method.
-//    }
-//
-//    public function delete(AbstractTask $task): void
-//    {
-//        // TODO: Implement delete() method.
-//    }
+    public function update(AbstractTask $task, TaskDto $dto): AbstractTask
+    {
+        $previousTask = $dto->getPreviousTask();
+        $originalPreviousTask = $task->getPreviousTask();
+
+        $task
+            ->setName($dto->getName())
+            ->setDescription($dto->getDescription())
+            ->setPoints($dto->getPoints());
+
+        switch ($task->getType()) {
+            case TaskTypeEnum::RelativePitchSound:
+                $task
+                    ->setFirstNote($dto->getFirstNote())
+                    ->setSecondNote($dto->getSecondNote());
+                break;
+            case TaskTypeEnum::Interval:
+                $task
+                    ->setFirstNote($dto->getFirstNote())
+                    ->setSecondNote($dto->getSecondNote())
+                    ->setIsHarmonic($dto->isHarmonic());
+                break;
+        }
+
+        if ($originalPreviousTask === $previousTask) {
+            $this->em->flush();
+
+            return $task;
+        }
+
+        $tasks = $this->getTasksForNode($task->getNode());
+
+        $originalTasksOrder = array_map(fn(AbstractTask $item) => $item->getId(), $tasks);
+        $newTasksOrder = [];
+        if (!$previousTask) {
+            $newTasksOrder[] = $task->getId();
+        }
+        foreach ($originalTasksOrder as $key => $value) {
+            if ($value === $previousTask?->getId()) {
+                $newTasksOrder[] = $value;
+                $newTasksOrder[] = $task->getId();
+                continue;
+            }
+
+            if ($value === $task->getId()) {
+                continue;
+            }
+
+            $newTasksOrder[] = $value;
+        }
+
+        /** @var AbstractTask $item */
+        foreach ($tasks as $item) {
+            $item->setPreviousTask(null);
+            $item->setNextTask(null);
+        }
+
+        $this->em->flush();
+
+        foreach ($newTasksOrder as $key => $item) {
+            if ($key === 0) {
+                continue;
+            }
+            $prev = $this->abstractTaskRepository->findOneBy(['id' => $newTasksOrder[$key - 1]]);
+            $current = $this->abstractTaskRepository->findOneBy(['id' => $item]);
+
+            $current->setPreviousTask($prev);
+            $prev->setNextTask($current);
+        }
+
+        $this->em->flush();
+
+        return $task;
+    }
+
+    public function delete(AbstractTask $task): void
+    {
+        $previousTaskId = $task->getPreviousTask()?->getId();
+        $nextTaskId = $task->getNextTask()?->getId();
+
+        $task->setPreviousTask(null);
+        $task->getPreviousTask()?->setNextTask(null);
+        $task->setNextTask(null);
+        $task->getNextTask()?->setPreviousTask(null);
+
+        $this->em->flush();
+
+        $previousTask = $this->abstractTaskRepository->findOneBy(['id' => $previousTaskId]);
+        $nextTask =  $this->abstractTaskRepository->findOneBy(['id' => $nextTaskId]);
+
+        $previousTask?->setNextTask($nextTask);
+        $nextTask?->setPreviousTask($previousTask);
+
+        $this->em->remove($task);
+        $this->em->flush();
+    }
 }

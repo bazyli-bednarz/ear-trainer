@@ -66,6 +66,7 @@ ui:
         previousNode: Poprzednia lekcja
         firstNode: (pierwsza lekcja)
     task:
+        number: LP
         name: Nazwa zadania
         description: Krótki opis wyświetlany przy zadaniu
         node: Lekcja
@@ -78,6 +79,7 @@ ui:
         interval: Interwał
         chord: Akord
         points: Punkty
+        points_number: "%points% pkt"
         course: Kurs
         previousTask: Poprzednie zadanie
         firstTask: (pierwsze zadanie)

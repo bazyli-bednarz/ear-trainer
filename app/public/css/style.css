@@ -301,3 +301,16 @@ select.disabled.form-select:disabled {
 .inject-new-task:focus .inject-new-task__tooltip {
     opacity: 1;
 }
+
+.node-link {
+    color: var(--custom-background-color);
+    text-decoration: none;
+}
+
+.table.tasks {
+    vertical-align: middle;
+}
+
+.table.tasks p {
+    margin-bottom: 0;
+}

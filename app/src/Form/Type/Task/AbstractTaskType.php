@@ -3,7 +3,7 @@
 namespace App\Form\Type\Task;
 
 use App\Dto\Node\CreateNodeDto;
-use App\Dto\Task\CreateTaskDto;
+use App\Dto\Task\TaskDto;
 use App\Entity\Course;
 use App\Entity\Enum\NoteEnum;
 use App\Entity\Enum\TaskTypeEnum;
@@ -21,7 +21,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CreateAbstractTaskType extends AbstractType
+class AbstractTaskType extends AbstractType
 {
     public function __construct(
         protected readonly TaskServiceInterface $taskService,
@@ -101,7 +101,9 @@ class CreateAbstractTaskType extends AbstractType
                     'label' => 'ui.task.previousTask',
                     'required' => false,
                     'placeholder' => 'ui.task.firstTask',
-                    'choices' => $this->taskService->getTasksForNode($options['node']),
+                    'choices' => $options['isEdit']
+                        ? $this->taskService->getTasksForNodeExceptGiven($options['node'], $options['task'])
+                        : $this->taskService->getTasksForNode($options['node']),
                     'choice_label' => 'name',
                     'data' => $options['previousTask'],
                 ])
@@ -128,12 +130,14 @@ class CreateAbstractTaskType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => CreateTaskDto::class,
+                'data_class' => TaskDto::class,
                 'label' => 'ui.task.%name%',
                 'previousTask' => null,
                 'course' => null,
                 'node' => null,
                 'type' => null,
+                'task' => null,
+                'isEdit' => false,
             ]
         );
     }
