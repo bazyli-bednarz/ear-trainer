@@ -3,10 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\Course;
+use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\NoteEnum;
 use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\Interval;
+use App\Entity\Task\IntervalChain;
 use App\Entity\Task\RelativePitchSound;
 use App\Entity\Task\TwoIntervals;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -100,6 +102,33 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $task->setNode($this->getReference('node-intervals-Interwały złożone'));
             $manager->persist($task);
             $this->addReference('task-two-intervals-' . $exampleTwoIntervals[$index][0], $task);
+        }
+
+        $exampleIntervalChain = [
+            ['1. Łańcuch interwałowy', 'Jaki interwał tworzy łańcuch?', NoteEnum::C4, IntervalEnum::Tritone, false, 20],
+            ['2. Łańcuch interwałowy', 'Jaki interwał tworzy łańcuch?', NoteEnum::C4, IntervalEnum::PerfectFifth, false, 20],
+            ['3. Łańcuch interwałowy', 'Jaki interwał tworzy łańcuch?', NoteEnum::C4, IntervalEnum::PerfectFourth, false, 20],
+            ['4. Łańcuch interwałowy', 'Jaki interwał tworzy łańcuch?', NoteEnum::C4, IntervalEnum::MajorThird, false, 20],
+        ];
+
+        foreach ($exampleIntervalChain as $index => $exampleInterval) {
+            $task = new IntervalChain();
+            $task
+                ->setName($exampleInterval[0])
+                ->setDescription($exampleInterval[1])
+                ->setFirstNote($exampleInterval[2])
+                ->setIntervalType($exampleInterval[3])
+                ->setIsHarmonic($exampleInterval[4])
+                ->setPoints($exampleInterval[5])
+            ;
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-interval-chain-' . $exampleIntervalChain[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-intervals-Interwały - zaawansowane ćwiczenia'));
+            $manager->persist($task);
+            $this->addReference('task-interval-chain-' . $exampleIntervalChain[$index][0], $task);
         }
 
         $manager->flush();

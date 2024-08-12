@@ -16,6 +16,7 @@ class NodeFixtures extends Fixture implements DependentFixtureInterface
             ['Pierwsze kroki', 'Zaczynamy od podstaw. Poznaj interwały!', 'bi bi-stars'],
             ['Interwały proste', 'Interwały proste to odstępy między dźwiękami, które są w obrębie jednej oktawy.', 'bi bi-music-note'],
             ['Interwały złożone', 'Interwały złożone to odstępy między dźwiękami, które przekraczają jedną oktawę.', 'bi bi-music-note-beamed'],
+            ['Interwały - zaawansowane ćwiczenia', 'Rozpoznawanie interwałów to kluczowa umiejętność każdego muzyka.', 'fa-solid fa-music'],
         ];
 
         foreach ($exampleNodesIntervals as $index => $nodeExample) {

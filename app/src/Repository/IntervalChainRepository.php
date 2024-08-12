@@ -2,17 +2,17 @@
 
 namespace App\Repository;
 
-use App\Entity\Task\Interval;
+use App\Entity\Task\IntervalChain;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Interval>
+ * @extends ServiceEntityRepository<IntervalChain>
  */
-class IntervalRepository extends ServiceEntityRepository
+class IntervalChainRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Interval::class);
+        parent::__construct($registry, IntervalChain::class);
     }
 }

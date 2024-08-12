@@ -303,8 +303,11 @@ select.disabled.form-select:disabled {
 }
 
 .node-link {
-    color: var(--custom-background-color);
+    color: var(--custom-color);
+    padding: 5px 10px;
+    background: var(--custom-background-color);
     text-decoration: none;
+    border-radius: 3px;
 }
 
 .table.tasks {
@@ -313,4 +316,10 @@ select.disabled.form-select:disabled {
 
 .table.tasks p {
     margin-bottom: 0;
+}
+
+h1.custom-underline {
+    text-decoration: underline var(--custom-background-color);
+    text-decoration-thickness: 3px;
+    text-decoration-style: dashed;
 }

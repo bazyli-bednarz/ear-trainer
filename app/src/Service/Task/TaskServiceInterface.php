@@ -2,13 +2,8 @@
 
 namespace App\Service\Task;
 
-use App\Dto\Node\CreateNodeDto;
-use App\Dto\Node\EditNodeDto;
+
 use App\Dto\Task\TaskDto;
-use App\Dto\Task\CreateIntervalTaskDto;
-use App\Dto\Task\CreateRelativePitchSoundTaskDto;
-use App\Entity\Course;
-use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 

@@ -3,6 +3,7 @@
 namespace App\Dto\Task;
 
 use App\Entity\Course;
+use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\NoteEnum;
 use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
@@ -34,6 +35,7 @@ class TaskDto
     private ?NoteEnum $fourthNote = null;
     private ?bool $isFirstHarmonic = null;
     private ?bool $isSecondHarmonic = null;
+    private ?IntervalEnum $intervalType = null;
 
 
     public function getName(): string
@@ -181,6 +183,16 @@ class TaskDto
         $this->isSecondHarmonic = $isSecondHarmonic;
     }
 
+    public function getIntervalType(): ?IntervalEnum
+    {
+        return $this->intervalType;
+    }
+
+    public function setIntervalType(?IntervalEnum $intervalType): void
+    {
+        $this->intervalType = $intervalType;
+    }
+
     public function setType(TaskTypeEnum $type): void
     {
         $this->type = $type;
@@ -211,6 +223,11 @@ class TaskDto
                 $dto->setFourthNote($task->getFourthNote());
                 $dto->setIsFirstHarmonic($task->isFirstHarmonic());
                 $dto->setIsSecondHarmonic($task->isSecondHarmonic());
+                break;
+            case TaskTypeEnum::IntervalChain:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setIsHarmonic($task->isHarmonic());
+                $dto->setIntervalType($task->getIntervalType());
                 break;
             default:
                 throw new \InvalidArgumentException('Invalid task type');

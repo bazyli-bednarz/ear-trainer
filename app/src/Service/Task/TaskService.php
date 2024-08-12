@@ -10,6 +10,7 @@ use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Entity\Task\Interval;
+use App\Entity\Task\IntervalChain;
 use App\Entity\Task\RelativePitchSound;
 use App\Entity\Task\TwoIntervals;
 use App\Repository\AbstractTaskRepository;
@@ -83,6 +84,7 @@ class TaskService implements TaskServiceInterface
             TaskTypeEnum::RelativePitchSound => $this->createRelativePitchSound($dto),
             TaskTypeEnum::Interval => $this->createInterval($dto),
             TaskTypeEnum::TwoIntervals => $this->createTwoIntervals($dto),
+            TaskTypeEnum::IntervalChain => $this->createIntervalChain($dto),
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -150,6 +152,18 @@ class TaskService implements TaskServiceInterface
         return $task;
     }
 
+    private function createIntervalChain(TaskDto $dto): IntervalChain
+    {
+        $task = new IntervalChain();
+        $task
+            ->setFirstNote($dto->getFirstNote())
+            ->setIsHarmonic($dto->isHarmonic())
+            ->setIntervalType($dto->getIntervalType())
+        ;
+
+        return $task;
+    }
+
     public function update(AbstractTask $task, TaskDto $dto): AbstractTask
     {
         $previousTask = $dto->getPreviousTask();
@@ -180,6 +194,12 @@ class TaskService implements TaskServiceInterface
                     ->setFourthNote($dto->getFourthNote())
                     ->setIsFirstHarmonic($dto->isFirstHarmonic())
                     ->setIsSecondHarmonic($dto->isSecondHarmonic());
+                break;
+            case TaskTypeEnum::IntervalChain:
+                $task
+                    ->setFirstNote($dto->getFirstNote())
+                    ->setIsHarmonic($dto->isHarmonic())
+                    ->setIntervalType($dto->getIntervalType());
                 break;
         }
 

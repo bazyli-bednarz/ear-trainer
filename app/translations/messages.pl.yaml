@@ -127,4 +127,30 @@ ui:
         F6: F6
         F#6: F#6
         G6: G6
+    interval:
+        PerfectUnison: Pryma czysta
+        MinorSecond: Sekunda mała
+        MajorSecond: Sekunda wielka
+        MinorThird: Tercja mała
+        MajorThird: Tercja wielka
+        PerfectFourth: Kwarta czysta
+        Tritone: Tryton
+        PerfectFifth: Kwinta czysta
+        MinorSixth: Seksta mała
+        MajorSixth: Seksta wielka
+        MinorSeventh: Septyma mała
+        MajorSeventh: Septyma wielka
+        PerfectOctave: Oktawa czysta
+        MinorNinth: Nona mała
+        MajorNinth: Nona wielka
+        MinorTenth: Decyma mała
+        MajorTenth: Decyma wielka
+        PerfectEleventh: Undecyma czysta
+        AugmentedEleventh: Undecyma zwiększona
+        PerfectTwelfth: Duodecyma czysta
+        MinorThirteenth: Tercdecyma mała
+        MajorThirteenth: Tercdecyma wielka
+        MinorFourteenth: Kwartdecyma mała
+        MajorFourteenth: Kwartdecyma wielka
+        PerfectFifteenth: Kwintdecyma czysta
 

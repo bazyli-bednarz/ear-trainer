@@ -8,6 +8,7 @@ use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Form\Type\Task\AbstractTaskType;
+use App\Form\Type\Task\IntervalChainType;
 use App\Form\Type\Task\IntervalType;
 use App\Form\Type\Task\RelativePitchSoundType;
 use App\Form\Type\Task\TwoIntervalsType;
@@ -60,6 +61,7 @@ class TaskController extends AbstractBaseController
             TaskTypeEnum::RelativePitchSound => RelativePitchSoundType::class,
             TaskTypeEnum::Interval => IntervalType::class,
             TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
+            TaskTypeEnum::IntervalChain => IntervalChainType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -117,6 +119,7 @@ class TaskController extends AbstractBaseController
             TaskTypeEnum::RelativePitchSound => RelativePitchSoundType::class,
             TaskTypeEnum::Interval => IntervalType::class,
             TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
+            TaskTypeEnum::IntervalChain => IntervalChainType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 

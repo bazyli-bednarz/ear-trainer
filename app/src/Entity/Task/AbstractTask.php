@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     'RelativePitchSound' => RelativePitchSound::class,
     'Interval' => Interval::class,
     'TwoIntervals' => TwoIntervals::class,
+    'IntervalChain' => IntervalChain::class,
 ])]
 abstract class AbstractTask
 {

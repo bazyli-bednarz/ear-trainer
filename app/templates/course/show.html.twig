@@ -6,7 +6,7 @@
 
 {% block body %}
     <div class="d-flex gap-3 mb-3 align-items-center">
-        <h1>{{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}</h1>
+        <h1 class="custom-underline">{{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}</h1>
 
         <a href="{{ url('course_update', {'slug': course.slug}) }}" class="btn btn-primary">
             <i class="bi bi-pencil-square"></i>
