@@ -198,4 +198,7 @@ ui:
         Blues: Bluesowa
         WholeTone: Całotonowa
         Chromatic: Chromatyczna
+    index:
+        info: Aplikacja Ear trainer pozwala na naukę rozpoznawania dźwięków, interwałów, akordów i skal. Wybierz w zakładce kurs, który chcesz rozpocząć.
+        info_masters_degree: "Autorem niniejszej aplikacji jest Bazyli Bednarz. Serwis ten stanowi integralną część pracy magisterskiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem prof. Mariusza Flasińskiego na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego."
 
