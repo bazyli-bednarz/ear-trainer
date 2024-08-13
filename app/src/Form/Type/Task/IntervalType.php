@@ -2,6 +2,7 @@
 
 namespace App\Form\Type\Task;
 
+use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\NoteEnum;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -24,13 +25,13 @@ class IntervalType extends AbstractTaskType
                 ]
             )
             ->add(
-                'secondNote',
+                'intervalType',
                 EnumType::class,
                 [
-                    'label' => 'ui.task.secondNote',
+                    'label' => 'ui.task.intervalType',
                     'required' => true,
-                    'class' => NoteEnum::class,
-                    'choice_label' => fn(NoteEnum $note) => $note->trans($this->translator),
+                    'class' => IntervalEnum::class,
+                    'choice_label' => fn(IntervalEnum $interval) => $interval->trans($this->translator),
                 ]
             )
             ->add(

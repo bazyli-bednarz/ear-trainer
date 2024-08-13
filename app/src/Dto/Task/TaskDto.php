@@ -3,9 +3,11 @@
 namespace App\Dto\Task;
 
 use App\Entity\Course;
+use App\Entity\Enum\FourNoteChordTypeEnum;
 use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\InversionTypeEnum;
 use App\Entity\Enum\NoteEnum;
+use App\Entity\Enum\ScaleTypeEnum;
 use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Enum\ThreeNoteChordTypeEnum;
 use App\Entity\Node;
@@ -33,14 +35,16 @@ class TaskDto
     private ?NoteEnum $firstNote = null;
     private ?NoteEnum $secondNote = null;
     private ?bool $isHarmonic = null;
-    private ?NoteEnum $thirdNote = null;
-    private ?NoteEnum $fourthNote = null;
     private ?bool $isFirstHarmonic = null;
     private ?bool $isSecondHarmonic = null;
     private ?IntervalEnum $intervalType = null;
+    private ?IntervalEnum $firstIntervalType = null;
+    private ?IntervalEnum $secondIntervalType = null;
     private ?ThreeNoteChordTypeEnum $chord = null;
     private ?InversionTypeEnum $inversion = null;
     private ?bool $shouldStudentRecogniseInversion = null;
+    private ?FourNoteChordTypeEnum $fourNoteChord = null;
+    private ?ScaleTypeEnum $scaleType = null;
 
     public function getName(): string
     {
@@ -146,27 +150,6 @@ class TaskDto
     {
         $this->isHarmonic = $isHarmonic;
     }
-
-    public function getThirdNote(): ?NoteEnum
-    {
-        return $this->thirdNote;
-    }
-
-    public function setThirdNote(?NoteEnum $thirdNote): void
-    {
-        $this->thirdNote = $thirdNote;
-    }
-
-    public function getFourthNote(): ?NoteEnum
-    {
-        return $this->fourthNote;
-    }
-
-    public function setFourthNote(?NoteEnum $fourthNote): void
-    {
-        $this->fourthNote = $fourthNote;
-    }
-
     public function isFirstHarmonic(): ?bool
     {
         return $this->isFirstHarmonic;
@@ -195,6 +178,26 @@ class TaskDto
     public function setIntervalType(?IntervalEnum $intervalType): void
     {
         $this->intervalType = $intervalType;
+    }
+
+    public function getFirstIntervalType(): ?IntervalEnum
+    {
+        return $this->firstIntervalType;
+    }
+
+    public function setFirstIntervalType(?IntervalEnum $firstIntervalType): void
+    {
+        $this->firstIntervalType = $firstIntervalType;
+    }
+
+    public function getSecondIntervalType(): ?IntervalEnum
+    {
+        return $this->secondIntervalType;
+    }
+
+    public function setSecondIntervalType(?IntervalEnum $secondIntervalType): void
+    {
+        $this->secondIntervalType = $secondIntervalType;
     }
 
     public function setType(TaskTypeEnum $type): void
@@ -232,6 +235,26 @@ class TaskDto
         $this->shouldStudentRecogniseInversion = $shouldStudentRecogniseInversion;
     }
 
+    public function getFourNoteChord(): ?FourNoteChordTypeEnum
+    {
+        return $this->fourNoteChord;
+    }
+
+    public function setFourNoteChord(?FourNoteChordTypeEnum $fourNoteChord): void
+    {
+        $this->fourNoteChord = $fourNoteChord;
+    }
+
+    public function getScaleType(): ?ScaleTypeEnum
+    {
+        return $this->scaleType;
+    }
+
+    public function setScaleType(?ScaleTypeEnum $scaleType): void
+    {
+        $this->scaleType = $scaleType;
+    }
+
     public static function fromEntity(AbstractTask $task): self
     {
         $dto = new self($task->getType());
@@ -247,14 +270,14 @@ class TaskDto
                 break;
             case TaskTypeEnum::Interval:
                 $dto->setFirstNote($task->getFirstNote());
-                $dto->setSecondNote($task->getSecondNote());
+                $dto->setIntervalType($task->getIntervalType());
                 $dto->setIsHarmonic($task->isHarmonic());
                 break;
             case TaskTypeEnum::TwoIntervals:
                 $dto->setFirstNote($task->getFirstNote());
                 $dto->setSecondNote($task->getSecondNote());
-                $dto->setThirdNote($task->getThirdNote());
-                $dto->setFourthNote($task->getFourthNote());
+                $dto->setFirstIntervalType($task->getFirstIntervalType());
+                $dto->setSecondIntervalType($task->getSecondIntervalType());
                 $dto->setIsFirstHarmonic($task->isFirstHarmonic());
                 $dto->setIsSecondHarmonic($task->isSecondHarmonic());
                 break;
@@ -269,6 +292,15 @@ class TaskDto
                 $dto->setInversion($task->getInversion());
                 $dto->setIsHarmonic($task->isHarmonic());
                 $dto->setShouldStudentRecogniseInversion($task->getShouldStudentRecogniseInversion());
+                break;
+            case TaskTypeEnum::FourNoteChord:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setIsHarmonic($task->isHarmonic());
+                $dto->setFourNoteChord($task->getFourNoteChord());
+                break;
+            case TaskTypeEnum::Scale:
+                $dto->setFirstNote($task->getFirstNote());
+                $dto->setScaleType($task->getScaleType());
                 break;
             default:
                 throw new \InvalidArgumentException('Invalid task type');

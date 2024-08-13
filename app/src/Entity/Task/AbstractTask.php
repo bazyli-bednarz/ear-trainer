@@ -21,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'TwoIntervals' => TwoIntervals::class,
     'IntervalChain' => IntervalChain::class,
     'ThreeNoteChord' => ThreeNoteChord::class,
+    'FourNoteChord' => FourNoteChord::class,
+    'Scale' => Scale::class,
 ])]
 abstract class AbstractTask
 {

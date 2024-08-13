@@ -91,6 +91,19 @@ enum IntervalEnum: string
         ];
     }
 
+    public static function optionsForIntervalChain(): array
+    {
+        return [
+            self::MinorSecond,
+            self::MajorSecond,
+            self::MinorThird,
+            self::MajorThird,
+            self::PerfectFourth,
+            self::Tritone,
+            self::PerfectFifth,
+        ];
+    }
+
     public static function fromInt(int $interval): self
     {
        return self::from(

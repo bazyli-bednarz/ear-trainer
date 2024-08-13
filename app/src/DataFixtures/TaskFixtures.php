@@ -3,15 +3,19 @@
 namespace App\DataFixtures;
 
 use App\Entity\Course;
+use App\Entity\Enum\FourNoteChordTypeEnum;
 use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\InversionTypeEnum;
 use App\Entity\Enum\NoteEnum;
+use App\Entity\Enum\ScaleTypeEnum;
 use App\Entity\Enum\ThreeNoteChordTypeEnum;
 use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Node;
+use App\Entity\Task\FourNoteChord;
 use App\Entity\Task\Interval;
 use App\Entity\Task\IntervalChain;
 use App\Entity\Task\RelativePitchSound;
+use App\Entity\Task\Scale;
 use App\Entity\Task\ThreeNoteChord;
 use App\Entity\Task\TwoIntervals;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -48,10 +52,10 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         }
 
         $exampleIntervals = [
-            ['1. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, NoteEnum::G4, false, 15],
-            ['2. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, NoteEnum::C4, true, 15],
-            ['3. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, NoteEnum::CSharp4, false, 15],
-            ['4. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, NoteEnum::FSharp4, true, 15],
+            ['1. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, IntervalEnum::Tritone, false, 15],
+            ['2. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, IntervalEnum::MajorThird, true, 15],
+            ['3. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, IntervalEnum::PerfectFifth, false, 15],
+            ['4. Jaki to interwał?', 'Rozpoznaj zagrany interwał!', NoteEnum::C4, IntervalEnum::PerfectFourth, true, 15],
         ];
 
 
@@ -62,7 +66,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                 ->setName($exampleInterval[0])
                 ->setDescription($exampleInterval[1])
                 ->setFirstNote($exampleInterval[2])
-                ->setSecondNote($exampleInterval[3])
+                ->setIntervalType($exampleInterval[3])
                 ->setIsHarmonic($exampleInterval[4])
                 ->setPoints($exampleInterval[5]);
 
@@ -77,10 +81,10 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
 
 
         $exampleTwoIntervals = [
-            ['1. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::G4, NoteEnum::C4, NoteEnum::E4, false, false, TwoIntervalsTypeEnum::Normal, 20],
-            ['2. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::C4,  NoteEnum::C4, NoteEnum::F4, false, true, TwoIntervalsTypeEnum::Normal, 20],
-            ['3. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::D4,  NoteEnum::D4, NoteEnum::DSharp4, false, true, TwoIntervalsTypeEnum::Normal, 20],
-            ['4. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::D4,  NoteEnum::D4, NoteEnum::DSharp4, true, false, TwoIntervalsTypeEnum::IntervalSquare, 20],
+            ['1. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::G4, IntervalEnum::PerfectFourth, IntervalEnum::PerfectFifth, false, false, TwoIntervalsTypeEnum::Normal, 20],
+            ['2. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::C4,  IntervalEnum::MajorThird, IntervalEnum::MajorThird, false, true, TwoIntervalsTypeEnum::Normal, 20],
+            ['3. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::D4,  IntervalEnum::Tritone, IntervalEnum::MajorNinth, false, true, TwoIntervalsTypeEnum::Normal, 20],
+            ['4. Jakie to dwa interwały?', 'Rozpoznaj zagrane interwały!', NoteEnum::C4, NoteEnum::D4,  IntervalEnum::Tritone, IntervalEnum::PerfectUnison, true, false, TwoIntervalsTypeEnum::IntervalSquare, 20],
         ];
 
         foreach ($exampleTwoIntervals as $index => $exampleInterval) {
@@ -90,8 +94,8 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                 ->setDescription($exampleInterval[1])
                 ->setFirstNote($exampleInterval[2])
                 ->setSecondNote($exampleInterval[3])
-                ->setThirdNote($exampleInterval[4])
-                ->setFourthNote($exampleInterval[5])
+                ->setFirstIntervalType($exampleInterval[4])
+                ->setSecondIntervalType($exampleInterval[5])
                 ->setIsFirstHarmonic($exampleInterval[6])
                 ->setIsSecondHarmonic($exampleInterval[7])
                 ->setTwoIntervalsTypeEnum($exampleInterval[8])
@@ -134,6 +138,62 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $this->addReference('task-interval-chain-' . $exampleIntervalChain[$index][0], $task);
         }
 
+        $exampleMajorChords = [
+            ['1. Rozpoznaj akord', 'Rozpoznaj zagrany akord durowy!', NoteEnum::C4, ThreeNoteChordTypeEnum::Major, InversionTypeEnum::NoInversion, false, false, 20],
+            ['2. Rozpoznaj akord', 'Rozpoznaj zagrany akord durowy!', NoteEnum::G4, ThreeNoteChordTypeEnum::Major, InversionTypeEnum::NoInversion, false, false, 20],
+            ['3. Rozpoznaj akord', 'Rozpoznaj zagrany akord durowy!', NoteEnum::F4, ThreeNoteChordTypeEnum::Major, InversionTypeEnum::NoInversion, false, false, 20],
+            ['4. Rozpoznaj akord', 'Rozpoznaj zagrany akord durowy!', NoteEnum::E4, ThreeNoteChordTypeEnum::Major, InversionTypeEnum::NoInversion, true, false, 20],
+        ];
+
+        foreach ($exampleMajorChords as $index => $exampleChord) {
+            $task = new ThreeNoteChord();
+            $task
+                ->setName($exampleChord[0])
+                ->setDescription($exampleChord[1])
+                ->setFirstNote($exampleChord[2])
+                ->setChord($exampleChord[3])
+                ->setInversion($exampleChord[4])
+                ->setIsHarmonic($exampleChord[5])
+                ->setShouldStudentRecogniseInversion($exampleChord[6])
+                ->setPoints($exampleChord[7]);
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-major-chord-' . $exampleMajorChords[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-chords-Akordy durowe'));
+            $manager->persist($task);
+            $this->addReference('task-major-chord-' . $exampleMajorChords[$index][0], $task);
+        }
+
+        $exampleMinorChords = [
+            ['1. Rozpoznaj akord', 'Rozpoznaj zagrany akord molowy!', NoteEnum::C4, ThreeNoteChordTypeEnum::Minor, InversionTypeEnum::NoInversion, false, false, 20],
+            ['2. Rozpoznaj akord', 'Rozpoznaj zagrany akord molowy!', NoteEnum::DSharp4, ThreeNoteChordTypeEnum::Minor, InversionTypeEnum::NoInversion, false, false, 20],
+            ['3. Rozpoznaj akord', 'Rozpoznaj zagrany akord molowy!', NoteEnum::E4, ThreeNoteChordTypeEnum::Minor, InversionTypeEnum::NoInversion, false, false, 20],
+            ['4. Rozpoznaj akord', 'Rozpoznaj zagrany akord molowy!', NoteEnum::F4, ThreeNoteChordTypeEnum::Minor, InversionTypeEnum::NoInversion, true, false, 20],
+        ];
+
+        foreach ($exampleMinorChords as $index => $exampleChord) {
+            $task = new ThreeNoteChord();
+            $task
+                ->setName($exampleChord[0])
+                ->setDescription($exampleChord[1])
+                ->setFirstNote($exampleChord[2])
+                ->setChord($exampleChord[3])
+                ->setInversion($exampleChord[4])
+                ->setIsHarmonic($exampleChord[5])
+                ->setShouldStudentRecogniseInversion($exampleChord[6])
+                ->setPoints($exampleChord[7]);
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-minor-chord-' . $exampleMinorChords[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-chords-Akordy molowe'));
+            $manager->persist($task);
+            $this->addReference('task-minor-chord-' . $exampleMinorChords[$index][0], $task);
+        }
+
 
         $exampleThreeNoteChords = [
             ['1. Rozpoznaj akord', 'Rozpoznaj zagrany akord!', NoteEnum::C4, ThreeNoteChordTypeEnum::Major, InversionTypeEnum::NoInversion, false, false, 20],
@@ -162,6 +222,59 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
             $task->setNode($this->getReference('node-chords-Akordy trójdźwiękowe'));
             $manager->persist($task);
             $this->addReference('task-three-note-chord-' . $exampleThreeNoteChords[$index][0], $task);
+        }
+
+        $exampleFourNoteChords = [
+            ['1. Rozpoznaj akord', 'Rozpoznaj zagrany akord czterodźwiękowy!', NoteEnum::C4, FourNoteChordTypeEnum::Dominant7, false, 25],
+            ['2. Rozpoznaj akord', 'Rozpoznaj zagrany akord czterodźwiękowy!', NoteEnum::C4, FourNoteChordTypeEnum::MajorMajor7, false, 30],
+            ['3. Rozpoznaj akord', 'Rozpoznaj zagrany akord czterodźwiękowy!', NoteEnum::C4, FourNoteChordTypeEnum::MinorMajor7, false, 30],
+            ['4. Rozpoznaj akord', 'Rozpoznaj zagrany akord czterodźwiękowy!', NoteEnum::C4, FourNoteChordTypeEnum::MinorMinor7, false, 30],
+        ];
+
+        foreach ($exampleFourNoteChords as $index => $exampleChord) {
+            $task = new FourNoteChord();
+            $task
+                ->setName($exampleChord[0])
+                ->setDescription($exampleChord[1])
+                ->setFirstNote($exampleChord[2])
+                ->setFourNoteChord($exampleChord[3])
+                ->setIsHarmonic($exampleChord[4])
+                ->setPoints($exampleChord[5])
+            ;
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-four-note-chord-' . $exampleFourNoteChords[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-chords-Akordy czterodźwiękowe'));
+            $manager->persist($task);
+            $this->addReference('task-four-note-chord-' . $exampleFourNoteChords[$index][0], $task);
+        }
+
+        $exampleScales = [
+            ['1. Rozpoznaj skalę', 'Rozpoznaj zagrane dźwięki skali!', NoteEnum::C4, ScaleTypeEnum::Major, 20],
+            ['2. Rozpoznaj skalę', 'Rozpoznaj zagrane dźwięki skali!', NoteEnum::C4, ScaleTypeEnum::Minor, 20],
+            ['3. Rozpoznaj skalę', 'Rozpoznaj zagrane dźwięki skali!', NoteEnum::C4, ScaleTypeEnum::HarmonicMinor, 20],
+            ['4. Rozpoznaj skalę', 'Rozpoznaj zagrane dźwięki skali!', NoteEnum::C4, ScaleTypeEnum::MelodicMinor, 20],
+        ];
+
+        foreach ($exampleScales as $index => $scale) {
+            $task = new Scale();
+            $task
+                ->setName($scale[0])
+                ->setDescription($scale[1])
+                ->setFirstNote($scale[2])
+                ->setScaleType($scale[3])
+                ->setPoints($scale[4])
+            ;
+
+            if ($index > 0) {
+                $task->setPreviousTask($this->getReference('task-scale-' . $exampleScales[$index - 1][0]));
+            }
+
+            $task->setNode($this->getReference('node-scales-Poznaj skale'));
+            $manager->persist($task);
+            $this->addReference('task-scale-' . $exampleScales[$index][0], $task);
         }
 
         $manager->flush();

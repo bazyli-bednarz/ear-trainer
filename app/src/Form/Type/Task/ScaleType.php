@@ -2,13 +2,12 @@
 
 namespace App\Form\Type\Task;
 
-use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\NoteEnum;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use App\Entity\Enum\ScaleTypeEnum;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class IntervalChainType extends AbstractTaskType
+class ScaleType extends AbstractTaskType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -26,24 +25,14 @@ class IntervalChainType extends AbstractTaskType
                 ]
             )
             ->add(
-                'intervalType',
+                'scaleType',
                 EnumType::class,
                 [
-                    'label' => 'ui.task.intervalType',
+                    'label' => 'ui.task.scale',
                     'required' => true,
-                    'class' => IntervalEnum::class,
-                    'choices' => IntervalEnum::optionsForIntervalChain(),
-                    'choice_label' => fn(IntervalEnum $interval) => $interval->trans($this->translator),
-                ]
-            )
-            ->add(
-                'isHarmonic',
-                CheckboxType::class,
-                [
-                    'label' => 'ui.task.isHarmonic',
-                    'required' => false,
-                ]
-            )
+                    'class' => ScaleTypeEnum::class,
+                    'choice_label' => fn(ScaleTypeEnum $scale) => $scale->trans($this->translator),
+            ])
         ;
     }
 

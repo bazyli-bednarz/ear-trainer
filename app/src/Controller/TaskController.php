@@ -8,9 +8,11 @@ use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Form\Type\Task\AbstractTaskType;
+use App\Form\Type\Task\FourNoteChordType;
 use App\Form\Type\Task\IntervalChainType;
 use App\Form\Type\Task\IntervalType;
 use App\Form\Type\Task\RelativePitchSoundType;
+use App\Form\Type\Task\ScaleType;
 use App\Form\Type\Task\ThreeNoteChordType;
 use App\Form\Type\Task\TwoIntervalsType;
 use App\Service\Course\CourseServiceInterface;
@@ -64,6 +66,8 @@ class TaskController extends AbstractBaseController
             TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
             TaskTypeEnum::IntervalChain => IntervalChainType::class,
             TaskTypeEnum::ThreeNoteChord => ThreeNoteChordType::class,
+            TaskTypeEnum::FourNoteChord => FourNoteChordType::class,
+            TaskTypeEnum::Scale => ScaleType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 
@@ -123,6 +127,8 @@ class TaskController extends AbstractBaseController
             TaskTypeEnum::TwoIntervals => TwoIntervalsType::class,
             TaskTypeEnum::IntervalChain => IntervalChainType::class,
             TaskTypeEnum::ThreeNoteChord => ThreeNoteChordType::class,
+            TaskTypeEnum::FourNoteChord => FourNoteChordType::class,
+            TaskTypeEnum::Scale => ScaleType::class,
             default => throw new \InvalidArgumentException('Invalid task type')
         };
 

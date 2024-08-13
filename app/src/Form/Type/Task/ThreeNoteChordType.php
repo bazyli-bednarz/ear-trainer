@@ -23,6 +23,7 @@ class ThreeNoteChordType extends AbstractTaskType
                     'label' => 'ui.task.firstNote',
                     'required' => true,
                     'class' => NoteEnum::class,
+                    'choices' => NoteEnum::choosableOptions(),
                     'choice_label' => fn(NoteEnum $note) => $note->trans($this->translator),
                 ]
             )

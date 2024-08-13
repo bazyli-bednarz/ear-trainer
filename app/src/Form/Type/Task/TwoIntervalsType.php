@@ -2,6 +2,7 @@
 
 namespace App\Form\Type\Task;
 
+use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\NoteEnum;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -20,17 +21,18 @@ class TwoIntervalsType extends AbstractTaskType
                     'label' => 'ui.task.firstNote',
                     'required' => true,
                     'class' => NoteEnum::class,
+                    'choices' => NoteEnum::choosableOptions(),
                     'choice_label' => fn(NoteEnum $note) => $note->trans($this->translator),
                 ]
             )
             ->add(
-                'secondNote',
+                'firstIntervalType',
                 EnumType::class,
                 [
-                    'label' => 'ui.task.secondNote',
+                    'label' => 'ui.task.firstIntervalType',
                     'required' => true,
-                    'class' => NoteEnum::class,
-                    'choice_label' => fn(NoteEnum $note) => $note->trans($this->translator),
+                    'class' => IntervalEnum::class,
+                    'choice_label' => fn(IntervalEnum $interval) => $interval->trans($this->translator),
                 ]
             )
             ->add(
@@ -42,23 +44,24 @@ class TwoIntervalsType extends AbstractTaskType
                 ]
             )
             ->add(
-                'thirdNote',
+                'secondNote',
                 EnumType::class,
                 [
-                    'label' => 'ui.task.thirdNote',
+                    'label' => 'ui.task.secondNote',
                     'required' => true,
                     'class' => NoteEnum::class,
+                    'choices' => NoteEnum::choosableOptions(),
                     'choice_label' => fn(NoteEnum $note) => $note->trans($this->translator),
                 ]
             )
             ->add(
-                'fourthNote',
+                'secondIntervalType',
                 EnumType::class,
                 [
-                    'label' => 'ui.task.fourthNote',
+                    'label' => 'ui.task.secondIntervalType',
                     'required' => true,
-                    'class' => NoteEnum::class,
-                    'choice_label' => fn(NoteEnum $note) => $note->trans($this->translator),
+                    'class' => IntervalEnum::class,
+                    'choice_label' => fn(IntervalEnum $interval) => $interval->trans($this->translator),
                 ]
             )
             ->add(

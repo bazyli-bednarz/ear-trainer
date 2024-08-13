@@ -40,9 +40,9 @@ class NodeFixtures extends Fixture implements DependentFixtureInterface
 
         $exampleNodesChords = [
             ['Pierwsze kroki', 'Zaczynamy od podstaw. Poznaj akordy!', 'bi bi-stars'],
-            ['Akordy trójdźwiękowe', 'Akordy trójdźwiękowe to składają się z trzech dźwięków.', 'bi bi-music-note-list'],
             ['Akordy durowe', 'Akordy durowe to akordy, które brzmią radośnie.', 'bi bi-emoji-laughing-fill'],
             ['Akordy molowe', 'Akordy molowe to akordy, które brzmią smutno.', 'bi bi-emoji-frown-fill'],
+            ['Akordy trójdźwiękowe', 'Akordy trójdźwiękowe składają się z trzech dźwięków.', 'bi bi-music-note-list'],
             ['Akordy czterodźwiękowe', 'Akordy czterodźwiękowe składają się z czterech dźwięków.', 'bi bi-music-note-beamed'],
         ];
 
@@ -66,9 +66,8 @@ class NodeFixtures extends Fixture implements DependentFixtureInterface
         }
 
         $exampleNodesScales = [
-            ['Skale modalne', 'Skale modalne to skale, które wywodzą się z muzyki średniowiecznej.', 'bi bi-shield-shaded'],
-            ['Skale pentatoniczne', 'Skale pentatoniczne to skale, które składają się z pięciu dźwięków.', 'bi bi-5-circle-fill'],
-            ['Skale bluesowe', 'Skale bluesowe to skale, które wywodzą się z muzyki bluesowej.', 'bi bi-cup-straw'],
+            ['Poznaj skale', 'Zaczynamy od podstaw. Poznaj skale!', 'bi bi-stars'],
+            ['Skale dur i moll', 'Skale dur i moll to podstawa w muzyce.', 'bi bi-music-note'],
         ];
 
         foreach ($exampleNodesScales as $index => $nodeExample) {

@@ -103,8 +103,8 @@ class ThreeNoteChord extends AbstractTask
     {
         return [
             $this->firstNote,
+            NoteUtils::getSecondNoteInThreeNoteChordWithInversion($this->firstNote, $this->chord, $this->inversion),
             NoteUtils::getThirdNoteInThreeNoteChordWithInversion($this->firstNote, $this->chord, $this->inversion),
-            NoteUtils::getFifthNoteInThreeNoteChordWithInversion($this->firstNote, $this->chord, $this->inversion),
         ];
     }
 }

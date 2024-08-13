@@ -73,8 +73,6 @@ ui:
         type: Typ zadania
         firstNote: Pierwsza nuta
         secondNote: Druga nuta
-        thirdNote: Trzecia nuta
-        fourthNote: Czwarta nuta
         scale: Skala
         interval: Interwał
         chord: Akord
@@ -88,6 +86,9 @@ ui:
         isSecondHarmonic: Czy dźwięki w drugim interwale mają być grane równocześnie (harmonicznie)?
         inversion: Przewrót
         shouldStudentRecogniseInversion: Czy student ma rozpoznawać przewrót?
+        intervalType: Interwał
+        firstIntervalType: Pierwszy interwał
+        secondIntervalType: Drugi interwał
     taskType:
         RelativePitchSound: Relatywna wysokość dźwięku
         Interval: Interwał
@@ -97,6 +98,18 @@ ui:
         FourNoteChord: Czterodźwięk
         Scale: Skala
     note:
+        C3: C3
+        C#3: C#3
+        D3: D3
+        D#3: D#3
+        E3: E3
+        F3: F3
+        F#3: F#3
+        G3: G3
+        G#3: G#3
+        A3: A3
+        A#3: A#3
+        B3: B3
         C4: C4
         C#4: C#4
         D4: D4
@@ -129,6 +142,11 @@ ui:
         F6: F6
         F#6: F#6
         G6: G6
+        G#6: G#6
+        A6: A6
+        A#6: A#6
+        B6: B6
+        C7: C7
     interval:
         PerfectUnison: Pryma czysta
         MinorSecond: Sekunda mała
@@ -160,10 +178,24 @@ ui:
         Minor: Mollowy
         Diminished: Zmniejszony
         Augmented: Zwiększony
+    fourNoteChordType:
+        Dominant7: Dominanta septymowa
+        MajorMajor7: Durowy z septymą wielką
+        MinorMajor7: Mollowy z septymą wielką
+        MinorMinor7: Mollowy z septymą małą
     inversion:
         NoInversion: Postać zasadnicza
         FirstInversion: Pierwsza inwersja
         SecondInversion: Druga inwersja
         ThirdInversion: Trzecia inwersja
-
+    scaleType:
+        Major: Durowa
+        Minor: Mollowa
+        HarmonicMinor: Mollowa harmoniczna
+        MelodicMinor: Mollowa melodyczna
+        MajorPentatonic: Pentatoniczna durowa
+        MinorPentatonic: Pentatoniczna mollowa
+        Blues: Bluesowa
+        WholeTone: Całotonowa
+        Chromatic: Chromatyczna
 

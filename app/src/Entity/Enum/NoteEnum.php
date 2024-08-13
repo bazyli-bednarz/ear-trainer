@@ -6,6 +6,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 enum NoteEnum: string
 {
+    case C3 = 'C3';
+    case CSharp3 = 'C#3';
+    case D3 = 'D3';
+    case DSharp3 = 'D#3';
+    case E3 = 'E3';
+    case F3 = 'F3';
+    case FSharp3 = 'F#3';
+    case G3 = 'G3';
+    case GSharp3 = 'G#3';
+    case A3 = 'A3';
+    case ASharp3 = 'A#3';
+    case B3 = 'B3';
     case C4 = 'C4';
     case CSharp4 = 'C#4';
     case D4 = 'D4';
@@ -38,10 +50,27 @@ enum NoteEnum: string
     case F6 = 'F6';
     case FSharp6 = 'F#6';
     case G6 = 'G6';
+    case GSharp6 = 'G#6';
+    case A6 = 'A6';
+    case ASharp6 = 'A#6';
+    case B6 = 'B6';
+    case C7 = 'C7';
 
     public static function options(): array
     {
         return [
+            self::C3,
+            self::CSharp3,
+            self::D3,
+            self::DSharp3,
+            self::E3,
+            self::F3,
+            self::FSharp3,
+            self::G3,
+            self::GSharp3,
+            self::A3,
+            self::ASharp3,
+            self::B3,
             self::C4,
             self::CSharp4,
             self::D4,
@@ -74,6 +103,42 @@ enum NoteEnum: string
             self::F6,
             self::FSharp6,
             self::G6,
+            self::GSharp6,
+            self::A6,
+            self::ASharp6,
+            self::B6,
+            self::C7,
+        ];
+    }
+
+    public static function choosableOptions(): array
+    {
+        return [
+            self::C3,
+            self::CSharp3,
+            self::D3,
+            self::DSharp3,
+            self::E3,
+            self::F3,
+            self::FSharp3,
+            self::G3,
+            self::GSharp3,
+            self::A3,
+            self::ASharp3,
+            self::B3,
+            self::C4,
+            self::CSharp4,
+            self::D4,
+            self::DSharp4,
+            self::E4,
+            self::F4,
+            self::FSharp4,
+            self::G4,
+            self::GSharp4,
+            self::A4,
+            self::ASharp4,
+            self::B4,
+            self::C5,
         ];
     }
 

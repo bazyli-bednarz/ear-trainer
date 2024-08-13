@@ -22,10 +22,10 @@ class TwoIntervals extends AbstractTask
     private ?NoteEnum $firstNote = null;
     #[ORM\Column(type: 'string', length: 3, enumType: NoteEnum::class)]
     private ?NoteEnum $secondNote = null;
-    #[ORM\Column(type: 'string', length: 3, enumType: NoteEnum::class)]
-    private ?NoteEnum $thirdNote = null;
-    #[ORM\Column(type: 'string', length: 3, enumType: NoteEnum::class)]
-    private ?NoteEnum $fourthNote = null;
+    #[ORM\Column(type: 'string', length: 30, enumType: IntervalEnum::class)]
+    private ?IntervalEnum $firstIntervalType = null;
+    #[ORM\Column(type: 'string', length: 30, enumType: IntervalEnum::class)]
+    private ?IntervalEnum $secondIntervalType = null;
     #[ORM\Column(type: 'boolean')]
     private ?bool $isFirstHarmonic = null;
     #[ORM\Column(type: 'boolean')]
@@ -64,26 +64,26 @@ class TwoIntervals extends AbstractTask
         return $this;
     }
 
-    public function getThirdNote(): NoteEnum
+    public function getFirstIntervalType(): IntervalEnum
     {
-        return $this->thirdNote;
+        return $this->firstIntervalType;
     }
 
-    public function setThirdNote(NoteEnum $thirdNote): self
+    public function setFirstIntervalType(IntervalEnum $firstIntervalType): self
     {
-        $this->thirdNote = $thirdNote;
+        $this->firstIntervalType = $firstIntervalType;
 
         return $this;
     }
 
-    public function getFourthNote(): NoteEnum
+    public function getSecondIntervalType(): IntervalEnum
     {
-        return $this->fourthNote;
+        return $this->secondIntervalType;
     }
 
-    public function setFourthNote(NoteEnum $fourthNote): self
+    public function setSecondIntervalType(IntervalEnum $secondIntervalType): self
     {
-        $this->fourthNote = $fourthNote;
+        $this->secondIntervalType = $secondIntervalType;
 
         return $this;
     }
@@ -122,25 +122,5 @@ class TwoIntervals extends AbstractTask
         $this->twoIntervalsTypeEnum = $twoIntervalsTypeEnum;
 
         return $this;
-    }
-
-    public function getFirstInterval(): IntervalEnum
-    {
-        return NoteUtils::getIntervalBetweenNotes($this->firstNote, $this->secondNote);
-    }
-
-    public function getSecondInterval(): IntervalEnum
-    {
-        return NoteUtils::getIntervalBetweenNotes($this->thirdNote, $this->fourthNote);
-    }
-
-    public function getSemitonesForFirstInterval(): int
-    {
-        return NoteUtils::countSemitonesBetweenNotes($this->firstNote, $this->secondNote);
-    }
-
-    public function getSemitonesForSecondInterval(): int
-    {
-        return NoteUtils::countSemitonesBetweenNotes($this->thirdNote, $this->fourthNote);
     }
 }
