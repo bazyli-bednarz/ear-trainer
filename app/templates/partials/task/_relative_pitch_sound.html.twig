@@ -1,0 +1,15 @@
+{#
+    parameters:
+    - firstNote: First note to play.
+    - secondNote: Second note to play.
+#}
+
+<div class="task task--relative-pitch-sound" data-first-note="{{ firstNote }}" data-second-note="{{ secondNote }}">
+    <button id="play-button" disabled class="disabled" aria-label="{{ 'ui.action.play' }}"><i class="bi bi-hourglass"></i></button>
+    <div class="answer mt-5">
+        {{ form_start(form) }}
+        {{ form_widget(form.relativePitchSoundAnswer) }}
+        {{ form_widget(form.check) }}
+        {{ form_end(form) }}
+    </div>
+</div>

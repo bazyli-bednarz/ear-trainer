@@ -43,6 +43,18 @@ class IntervalChain extends AbstractTask
         return $this;
     }
 
+    public function getNthNote(int $n): ?NoteEnum
+    {
+        if ($n < 1) {
+            throw new \InvalidArgumentException('n must be greater than 0');
+        }
+        try {
+            return NoteEnum::fromInt(NoteEnum::getIndex($this->firstNote) + (IntervalEnum::getHalfSteps($this->intervalType)) * ($n - 1));
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
     public function isHarmonic(): bool
     {
         return $this->isHarmonic;

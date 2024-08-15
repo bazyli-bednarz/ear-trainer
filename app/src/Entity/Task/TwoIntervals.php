@@ -45,6 +45,12 @@ class TwoIntervals extends AbstractTask
         return $this->firstNote;
     }
 
+    public function getFirstNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getFirstNote());
+    }
+
+
     public function setFirstNote(NoteEnum $firstNote): self
     {
         $this->firstNote = $firstNote;
@@ -57,11 +63,52 @@ class TwoIntervals extends AbstractTask
         return $this->secondNote;
     }
 
+    public function getSecondNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getSecondNote());
+    }
+
     public function setSecondNote(NoteEnum $secondNote): self
     {
         $this->secondNote = $secondNote;
 
         return $this;
+    }
+
+    /**
+     * Second note for first interval
+     */
+    public function getThirdNote(): NoteEnum
+    {
+        return NoteEnum::fromInt(NoteEnum::getIndex($this->firstNote) + IntervalEnum::getHalfSteps($this->firstIntervalType));
+    }
+
+    public function getThirdNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getThirdNote());
+    }
+
+    /**
+     * Second note for second interval
+     */
+    public function getFourthNote(): NoteEnum
+    {
+        return NoteEnum::fromInt(NoteEnum::getIndex($this->secondNote) + IntervalEnum::getHalfSteps($this->secondIntervalType));
+    }
+
+    public function getFourthNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getFourthNote());
+    }
+
+    public function getUpperEdgeIntervalType(): IntervalEnum
+    {
+        return IntervalEnum::fromInt(abs($this->getThirdNoteIndex() - $this->getFourthNoteIndex()));
+    }
+
+    public function getLowerEdgeIntervalType(): IntervalEnum
+    {
+        return IntervalEnum::fromInt(abs($this->getFirstNoteIndex() - $this->getSecondNoteIndex()));
     }
 
     public function getFirstIntervalType(): IntervalEnum

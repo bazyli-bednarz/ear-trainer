@@ -3,7 +3,9 @@
 namespace App\Entity\Task;
 
 use App\Entity\Enum\NoteEnum;
+use App\Entity\Enum\RelativePitchSoundAnswerEnum;
 use App\Entity\Enum\TaskTypeEnum;
+use App\Entity\Utils\NoteUtils;
 use App\Repository\RelativePitchSoundRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -49,5 +51,21 @@ class RelativePitchSound extends AbstractTask
         $this->secondNote = $secondNote;
 
         return $this;
+    }
+
+    public function getCorrectAnswer(): RelativePitchSoundAnswerEnum
+    {
+        $firstNote = NoteEnum::getIndex($this->getFirstNote());
+        $secondNote = NoteEnum::getIndex($this->getSecondNote());
+
+        if ($firstNote > $secondNote) {
+            return RelativePitchSoundAnswerEnum::FirstHigher;
+        }
+        if ($firstNote < $secondNote) {
+            return RelativePitchSoundAnswerEnum::SecondHigher;
+        }
+
+        return RelativePitchSoundAnswerEnum::Equal;
+
     }
 }

@@ -1,0 +1,36 @@
+{#
+parameters:
+- firstNote: First note of the chord.
+- secondNote: Second note of the chord.
+- thirdNote: Third note of the chord.
+- isHarmonic: Boolean value to determine if the notes are played together.
+- shouldStudentRecogniseInversion: Boolean value to determine if the student should recognise the inversion.
+- chord: The chord to be played.
+- form: Form to submit the answer.
+#}
+
+<div class="task task--three-note-chord" data-first-note="{{ firstNote }}" data-second-note="{{ secondNote }}"
+     data-third-note="{{ thirdNote }}" data-is-harmonic="{{ isHarmonic }}">
+    <button id="play-button" disabled class="disabled" aria-label="{{ 'ui.action.play' }}"><i
+                class="bi bi-hourglass"></i></button>
+    <div class="answer mt-5">
+        {{ form_start(form) }}
+        <div class="three-note-chord-answer">
+            <div>
+                {{ form_label(form.threeNoteChordAnswer) }}
+                {{ form_widget(form.threeNoteChordAnswer) }}
+            </div>
+
+            {% if shouldStudentRecogniseInversion and chord != 'Augmented' %}
+                <div>
+                    {{ form_label(form.inversionAnswer) }}
+                    {{ form_widget(form.inversionAnswer) }}
+                </div>
+
+            {% endif %}
+        </div>
+
+        {{ form_widget(form.check) }}
+        {{ form_end(form) }}
+    </div>
+</div>

@@ -1,0 +1,43 @@
+{#
+    parameters:
+    - firstNote: First note of first interaval.
+    - secondNote: First note of second interval.
+    - isFirstHarmonic: Whether the first interval is harmonic or melodic.
+    - thirdNote: Second note of first interval.
+    - fourthNote: Second note of second interval.
+    - isSecondHarmonic: Whether the second interval is harmonic or melodic.
+    - twoIntervalsType: Type of the two intervals.
+    - form: Form to submit the answer.
+#}
+
+<div class="task task--two-intervals" data-first-note="{{ firstNote }}" data-second-note="{{ secondNote }}" data-third-note="{{ thirdNote }}" data-fourth-note="{{ fourthNote }}" data-is-first-harmonic="{{ isFirstHarmonic }}" data-is-second-harmonic="{{ isSecondHarmonic }}">
+    <button id="play-button" disabled class="disabled" aria-label="{{ 'ui.action.play' }}"><i class="bi bi-hourglass"></i></button>
+    <div class="answer mt-5">
+        {{ form_start(form) }}
+        <div class="two-intervals-answer">
+            <div>
+                {{ form_label(form.firstIntervalAnswer) }}
+                {{ form_widget(form.firstIntervalAnswer) }}
+            </div>
+            <div>
+                {{ form_label(form.secondIntervalAnswer) }}
+                {{ form_widget(form.secondIntervalAnswer) }}
+            </div>
+            {% if twoIntervalsType == "IntervalSquare" %}
+                <div>
+                    {{ form_label(form.lowerEdgeIntervalAnswer) }}
+                    {{ form_widget(form.lowerEdgeIntervalAnswer) }}
+                </div>
+                <div>
+                    {{ form_label(form.upperEdgeIntervalAnswer) }}
+                    {{ form_widget(form.upperEdgeIntervalAnswer) }}
+                </div>
+            {% endif %}
+        </div>
+
+
+
+        {{ form_widget(form.check) }}
+        {{ form_end(form) }}
+    </div>
+</div>

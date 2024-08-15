@@ -1,0 +1,21 @@
+{#
+parameters:
+- notes: Array of notes to display.
+- form: Form to submit the answer.
+#}
+
+<div class="task task--scale"
+     data-notes='[{% for note in notes %}"{{ note.value }}"{% if not loop.last %},{% endif %}{% endfor %}]'>
+    <button id="play-button" disabled class="disabled" aria-label="{{ 'ui.action.play' }}"><i
+                class="bi bi-hourglass"></i></button>
+    <div class="answer mt-5">
+        {{ form_start(form) }}
+
+                {{ form_label(form.scaleAnswer) }}
+                {{ form_widget(form.scaleAnswer) }}
+
+
+        {{ form_widget(form.check) }}
+        {{ form_end(form) }}
+    </div>
+</div>

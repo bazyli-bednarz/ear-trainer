@@ -26,4 +26,79 @@
     {% if task.description %}
         <p class="mb-5">{{ task.description }}</p>
     {% endif %}
+
+    <div id="task">
+        {% if task.type.value == 'RelativePitchSound' %}
+            {% include 'partials/task/_relative_pitch_sound.html.twig' with {
+                'firstNote': task.firstNote.value,
+                'secondNote': task.secondNote.value,
+                'form': form,
+            } %}
+        {% elseif task.type.value == 'Interval' %}
+            {% include 'partials/task/_interval.html.twig' with {
+                'firstNote': task.firstNote.value,
+                'secondNote': task.secondNote.value,
+                'isHarmonic': task.isHarmonic,
+                'form': form,
+            } %}
+        {% elseif task.type.value == 'TwoIntervals' %}
+            {% include 'partials/task/_two_intervals.html.twig' with {
+                'firstNote': task.firstNote.value,
+                'isFirstHarmonic': task.isFirstHarmonic,
+                'secondNote': task.secondNote.value,
+                'isSecondHarmonic': task.isSecondHarmonic,
+                'thirdNote': task.thirdNote.value,
+                'fourthNote': task.fourthNote.value,
+                'twoIntervalsType': task.twoIntervalsTypeEnum.value,
+                'form': form,
+            } %}
+        {% elseif task.type.value == 'IntervalChain' %}
+            {% include 'partials/task/_interval_chain.html.twig' with {
+                'firstNote': task.firstNote.value,
+                'secondNote': task.nthNote(2).value,
+                'thirdNote': task.nthNote(3).value,
+                'fourthNote': task.nthNote(4) ? task.nthNote(4).value : null,
+                'fifthNote': task.nthNote(5) ? task.nthNote(5).value : null,
+                'isHarmonic': task.isHarmonic,
+                'form': form,
+            } %}
+        {% elseif task.type.value == 'ThreeNoteChord' %}
+            {% include 'partials/task/_three_note_chord.html.twig' with {
+                'firstNote': task.getNotes()[0].value,
+                'secondNote': task.getNotes()[1].value,
+                'thirdNote': task.getNotes()[2].value,
+                'isHarmonic': task.isHarmonic,
+                'shouldStudentRecogniseInversion': task.shouldStudentRecogniseInversion,
+                'chord': task.chord.value,
+                'form': form,
+            } %}
+        {% elseif task.type.value == 'FourNoteChord' %}
+            {% include 'partials/task/_four_note_chord.html.twig' with {
+                'firstNote': task.getNotes()[0].value,
+                'secondNote': task.getNotes()[1].value,
+                'thirdNote': task.getNotes()[2].value,
+                'fourthNote': task.getNotes()[3].value,
+                'isHarmonic': task.isHarmonic,
+                'form': form,
+            } %}
+        {% elseif task.type.value == 'Scale' %}
+            {% include 'partials/task/_scale.html.twig' with {
+                'notes': task.getNotes(),
+                'form': form,
+            } %}
+        {% endif %}
+    </div>
+
+
+
 {% endblock %}
+
+{% block additional_scripts %}
+    <script src="http://unpkg.com/tone"></script>
+    <script type="text/javascript">
+        const assetsPath = '{{ asset('sound') }}/';
+    </script>
+    <script src="{{ asset('js/Tonejs-Instruments.js') }}"></script>
+    <script src="{{ asset('js/player/' ~ task.type.value[:1]|lower ~ task.type.value[1:] ~ '.js') }}"></script>
+{% endblock %}
+

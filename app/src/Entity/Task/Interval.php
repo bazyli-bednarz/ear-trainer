@@ -42,6 +42,16 @@ class Interval extends AbstractTask
         return $this;
     }
 
+    public function getSecondNote(): NoteEnum
+    {
+        return NoteEnum::fromInt(NoteEnum::getIndex($this->firstNote) + IntervalEnum::getHalfSteps($this->intervalType));
+    }
+
+    public function getSecondNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getSecondNote());
+    }
+
     public function getIntervalType(): IntervalEnum
     {
         return $this->intervalType;

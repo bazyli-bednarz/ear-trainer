@@ -4,6 +4,7 @@ namespace App\Form\Type\Task;
 
 use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\NoteEnum;
+use App\Entity\Enum\TwoIntervalsTypeEnum;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -70,6 +71,16 @@ class TwoIntervalsType extends AbstractTaskType
                 [
                     'label' => 'ui.task.isSecondHarmonic',
                     'required' => false,
+                ]
+            )
+            ->add(
+                'twoIntervalsType',
+                EnumType::class,
+                [
+                    'label' => 'ui.task.twoIntervalsType',
+                    'required' => true,
+                    'class' => TwoIntervalsTypeEnum::class,
+                    'choice_label' => fn(TwoIntervalsTypeEnum $choice) => $choice->trans($this->translator),
                 ]
             )
         ;

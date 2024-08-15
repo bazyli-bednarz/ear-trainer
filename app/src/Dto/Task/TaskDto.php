@@ -10,6 +10,7 @@ use App\Entity\Enum\NoteEnum;
 use App\Entity\Enum\ScaleTypeEnum;
 use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Enum\ThreeNoteChordTypeEnum;
+use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 
@@ -40,6 +41,7 @@ class TaskDto
     private ?IntervalEnum $intervalType = null;
     private ?IntervalEnum $firstIntervalType = null;
     private ?IntervalEnum $secondIntervalType = null;
+    private ?TwoIntervalsTypeEnum $twoIntervalsType = null;
     private ?ThreeNoteChordTypeEnum $chord = null;
     private ?InversionTypeEnum $inversion = null;
     private ?bool $shouldStudentRecogniseInversion = null;
@@ -170,6 +172,16 @@ class TaskDto
         $this->isSecondHarmonic = $isSecondHarmonic;
     }
 
+    public function getTwoIntervalsType(): ?TwoIntervalsTypeEnum
+    {
+        return $this->twoIntervalsType;
+    }
+
+    public function setTwoIntervalsType(?TwoIntervalsTypeEnum $twoIntervalsType): void
+    {
+        $this->twoIntervalsType = $twoIntervalsType;
+    }
+
     public function getIntervalType(): ?IntervalEnum
     {
         return $this->intervalType;
@@ -255,6 +267,53 @@ class TaskDto
         $this->scaleType = $scaleType;
     }
 
+    public function getUpperEdgeIntervalType(): IntervalEnum
+    {
+        return IntervalEnum::fromInt(abs($this->getThirdNoteIndex() - $this->getFourthNoteIndex()));
+    }
+
+    public function getLowerEdgeIntervalType(): IntervalEnum
+    {
+        return IntervalEnum::fromInt(abs($this->getFirstNoteIndex() - $this->getSecondNoteIndex()));
+    }
+
+    public function getFirstNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getFirstNote());
+    }
+
+    public function getSecondNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getSecondNote());
+    }
+
+
+    /**
+     * Second note for first interval
+     */
+    public function getThirdNote(): NoteEnum
+    {
+        return NoteEnum::fromInt(NoteEnum::getIndex($this->firstNote) + IntervalEnum::getHalfSteps($this->firstIntervalType));
+    }
+
+    public function getThirdNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getThirdNote());
+    }
+
+    /**
+     * Second note for second interval
+     */
+    public function getFourthNote(): NoteEnum
+    {
+        return NoteEnum::fromInt(NoteEnum::getIndex($this->secondNote) + IntervalEnum::getHalfSteps($this->secondIntervalType));
+    }
+
+    public function getFourthNoteIndex(): int
+    {
+        return NoteEnum::getIndex($this->getFourthNote());
+    }
+
     public static function fromEntity(AbstractTask $task): self
     {
         $dto = new self($task->getType());
@@ -280,6 +339,7 @@ class TaskDto
                 $dto->setSecondIntervalType($task->getSecondIntervalType());
                 $dto->setIsFirstHarmonic($task->isFirstHarmonic());
                 $dto->setIsSecondHarmonic($task->isSecondHarmonic());
+                $dto->setTwoIntervalsType($task->getTwoIntervalsTypeEnum());
                 break;
             case TaskTypeEnum::IntervalChain:
                 $dto->setFirstNote($task->getFirstNote());

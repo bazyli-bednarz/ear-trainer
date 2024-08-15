@@ -8,7 +8,6 @@ use App\Entity\Enum\InversionTypeEnum;
 use App\Entity\Enum\NoteEnum;
 use App\Entity\Enum\ScaleTypeEnum;
 use App\Entity\Enum\ThreeNoteChordTypeEnum;
-use App\Entity\Task\ThreeNoteChord;
 use Exception;
 
 class NoteUtils
@@ -30,8 +29,7 @@ class NoteUtils
     public static function getSecondNoteInThreeNoteChordWithInversion(NoteEnum $note, ThreeNoteChordTypeEnum $chord, InversionTypeEnum $inversion): ?NoteEnum
     {
         try {
-
-            $noteIndex = array_search($note->value, NoteEnum::options());
+            $noteIndex = NoteEnum::getIndex($note);
 
             if ($inversion === InversionTypeEnum::NoInversion) {
                 $interval = match ($chord) {
@@ -70,7 +68,7 @@ class NoteUtils
     {
         try {
 
-            $noteIndex = array_search($note->value, NoteEnum::options());
+            $noteIndex = NoteEnum::getIndex($note);
 
             if ($inversion === InversionTypeEnum::NoInversion) {
                 $interval = match ($chord) {
@@ -93,7 +91,7 @@ class NoteUtils
                     ThreeNoteChordTypeEnum::Major => 9,
                     ThreeNoteChordTypeEnum::Minor => 8,
                     ThreeNoteChordTypeEnum::Diminished => 9,
-                    ThreeNoteChordTypeEnum::Augmented => 9,
+                    ThreeNoteChordTypeEnum::Augmented => 8,
                 };
             }
 
@@ -108,7 +106,7 @@ class NoteUtils
     public static function getSecondNoteInFourNoteChord(NoteEnum $note, FourNoteChordTypeEnum $chord): ?NoteEnum
     {
         try {
-            $noteIndex = array_search($note->value, NoteEnum::options());
+            $noteIndex = NoteEnum::getIndex($note);
 
             $interval = match ($chord) {
                 FourNoteChordTypeEnum::Dominant7 => 4,
@@ -127,7 +125,7 @@ class NoteUtils
     public static function getThirdNoteInFourNoteChord(NoteEnum $note, FourNoteChordTypeEnum $chord): ?NoteEnum
     {
         try {
-            $noteIndex = array_search($note->value, NoteEnum::options());
+            $noteIndex = NoteEnum::getIndex($note);
 
             $interval = match ($chord) {
                 FourNoteChordTypeEnum::Dominant7 => 7,
@@ -146,7 +144,7 @@ class NoteUtils
     public static function getFourthNoteInFourNoteChord(NoteEnum $note, FourNoteChordTypeEnum $chord): ?NoteEnum
     {
         try {
-            $noteIndex = array_search($note->value, NoteEnum::options());
+            $noteIndex = NoteEnum::getIndex($note);
 
             $interval = match ($chord) {
                 FourNoteChordTypeEnum::Dominant7 => 10,
@@ -271,7 +269,9 @@ class NoteUtils
 
     private function addSemitones(NoteEnum $note, int $semitones): NoteEnum
     {
-        return NoteEnum::from(NoteEnum::options()[(array_search($note->value, NoteEnum::options()) + $semitones) % count(NoteEnum::options())]->value);
+        $noteIndex = NoteEnum::getIndex($note);
+        $newNoteIndex = ($noteIndex + $semitones) % count(NoteEnum::options());
+        return NoteEnum::from(NoteEnum::options()[$newNoteIndex]->value);
     }
 
 }

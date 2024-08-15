@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Dto\Task\TaskDto;
+use App\Dto\TaskAnswer\TaskAnswerDto;
 use App\Entity\Course;
 use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
+use App\Entity\Task\Interval;
 use App\Form\Type\Task\AbstractTaskType;
 use App\Form\Type\Task\FourNoteChordType;
 use App\Form\Type\Task\IntervalChainType;
@@ -15,9 +17,17 @@ use App\Form\Type\Task\RelativePitchSoundType;
 use App\Form\Type\Task\ScaleType;
 use App\Form\Type\Task\ThreeNoteChordType;
 use App\Form\Type\Task\TwoIntervalsType;
+use App\Form\Type\TaskAnswer\FourNoteChordAnswerType;
+use App\Form\Type\TaskAnswer\IntervalAnswerType;
+use App\Form\Type\TaskAnswer\IntervalChainAnswerType;
+use App\Form\Type\TaskAnswer\RelativePitchSoundAnswerType;
+use App\Form\Type\TaskAnswer\ScaleAnswerType;
+use App\Form\Type\TaskAnswer\ThreeNoteChordAnswerType;
+use App\Form\Type\TaskAnswer\TwoIntervalsAnswerType;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
 use App\Service\Task\TaskServiceInterface;
+use App\Service\TaskAnswer\TaskAnswerServiceInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +43,7 @@ class TaskController extends AbstractBaseController
         TranslatorInterface                   $translator,
         private readonly NodeServiceInterface $nodeService,
         private readonly TaskServiceInterface $taskService,
+        private readonly TaskAnswerServiceInterface $taskAnswerService,
     )
     {
         parent::__construct($courseService, $translator);
@@ -222,7 +233,7 @@ class TaskController extends AbstractBaseController
     #[Route(
         '/{slug}/{nodeSlug}/{taskSlug}',
         name: 'task_show',
-        methods: ['GET'])
+        methods: ['GET', 'POST'])
     ]
     public function show(
         #[MapEntity(mapping: ['slug' => 'slug'])] Course           $course,
@@ -231,6 +242,66 @@ class TaskController extends AbstractBaseController
         Request                                                    $request
     ): Response
     {
+        $nextTask = $task->getNextTask();
+
+        $formType = match ($task->getType()) {
+            TaskTypeEnum::RelativePitchSound => RelativePitchSoundAnswerType::class,
+            TaskTypeEnum::Interval => IntervalAnswerType::class,
+            TaskTypeEnum::TwoIntervals => TwoIntervalsAnswerType::class,
+            TaskTypeEnum::IntervalChain => IntervalChainAnswerType::class,
+            TaskTypeEnum::ThreeNoteChord => ThreeNoteChordAnswerType::class,
+            TaskTypeEnum::FourNoteChord => FourNoteChordAnswerType::class,
+            TaskTypeEnum::Scale => ScaleAnswerType::class,
+            default => throw new \InvalidArgumentException('Invalid task type')
+        };
+
+        $form = $this->createForm(
+            $formType,
+            $dto = new TaskAnswerDto(),
+            [
+                'course' => $course,
+                'nextTask' => $nextTask,
+                'node' => $node,
+                'task' => $task,
+                'type' => $task->getType(),
+                'interval' => $task->getType() === TaskTypeEnum::Interval ? $task->getIntervalType() : false,
+                'firstInterval' => $task->getType() === TaskTypeEnum::TwoIntervals ? $task->getFirstIntervalType() : false,
+                'secondInterval' => $task->getType() === TaskTypeEnum::TwoIntervals ? $task->getSecondIntervalType() : false,
+                'twoIntervalsType' => $task->getType() === TaskTypeEnum::TwoIntervals ? $task->getTwoIntervalsTypeEnum() : null,
+                'chord' => $task->getType() === TaskTypeEnum::ThreeNoteChord ? $task->getChord() : null,
+                'shouldStudentRecogniseInversion' => $task->getType() === TaskTypeEnum::ThreeNoteChord ? $task->getShouldStudentRecogniseInversion() : false,
+            ],
+        );
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $feedback = $this->taskAnswerService->handleAnswer($dto, $task);
+
+            $this->addFlash(
+                $feedback->getIsCorrect() ? 'success' : 'danger',
+                $feedback->getFeedback(),
+            );
+
+            if ($feedback->getIsCorrect() && $nextTask) {
+                return $this->redirectToRoute('task_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug(), 'taskSlug' => $nextTask->getSlug()]);
+            }
+
+            if ($feedback->getIsCorrect() && !$nextTask) {
+
+                $this->addFlash(
+                    'success',
+                    $this->translator->trans(
+                        'ui.message.finished.node',
+                        ['%name%' => $node->getName()]
+                    )
+                );
+
+                return $this->redirectToRoute('node_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug()]);
+            }
+
+            return $this->redirectToRoute('task_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug(), 'taskSlug' => $task->getSlug()]);
+        }
+
 
         return $this->render(
             'task/show.html.twig',
@@ -238,6 +309,7 @@ class TaskController extends AbstractBaseController
                 'course' => $course,
                 'node' => $node,
                 'task' => $task,
+                'form' => $form->createView(),
             ]
         );
     }

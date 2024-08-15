@@ -26,6 +26,7 @@ ui:
         ranking:
             label: Ranking
     action:
+        check: Sprawdź
         back_to_list:
             course: Wróć do listy kursów
         save: Zapisz
@@ -55,6 +56,8 @@ ui:
             node: Lekcja %name% została usunięta
             task: Zadanie %name% zostało usunięte
         form_error: Wystąpił błąd przy wypełnianiu formularza.
+        finished:
+            node: Gratulacje! Ukończyłeś lekcję %name%.
     course:
         name: Nazwa
         description: Opis
@@ -87,8 +90,16 @@ ui:
         inversion: Przewrót
         shouldStudentRecogniseInversion: Czy student ma rozpoznawać przewrót?
         intervalType: Interwał
+        twoIntervalsType: Rodzaj zadania
         firstIntervalType: Pierwszy interwał
         secondIntervalType: Drugi interwał
+        firstIntervalAnswer: Pierwszy interwał
+        secondIntervalAnswer: Drugi interwał
+        upperEdgeIntervalAnswer: Interwał pomiędzy górnym dźwiękiem pierwszego interwału a górnym dźwiękiem drugiego interwału
+        lowerEdgeIntervalAnswer: Interwał pomiędzy dolnym dźwiękiem pierwszego interwału a dolnym dźwiękiem drugiego interwału
+        chordAnswer: Zagrany akord
+        inversionAnswer: Przewrót akordu
+        scaleAnswer: Zagrana skala
     taskType:
         RelativePitchSound: Relatywna wysokość dźwięku
         Interval: Interwał
@@ -173,16 +184,19 @@ ui:
         MinorFourteenth: Kwartdecyma mała
         MajorFourteenth: Kwartdecyma wielka
         PerfectFifteenth: Kwintdecyma czysta
+    twoIntervalsType:
+        Normal: Jeden po drugim
+        IntervalSquare: Kwadrat interwałowy
     threeNoteChordType:
         Major: Durowy
-        Minor: Mollowy
+        Minor: Molowy
         Diminished: Zmniejszony
         Augmented: Zwiększony
     fourNoteChordType:
         Dominant7: Dominanta septymowa
         MajorMajor7: Durowy z septymą wielką
-        MinorMajor7: Mollowy z septymą wielką
-        MinorMinor7: Mollowy z septymą małą
+        MinorMajor7: Molowy z septymą wielką
+        MinorMinor7: Molowy z septymą małą
     inversion:
         NoInversion: Postać zasadnicza
         FirstInversion: Pierwsza inwersja
@@ -190,15 +204,23 @@ ui:
         ThirdInversion: Trzecia inwersja
     scaleType:
         Major: Durowa
-        Minor: Mollowa
-        HarmonicMinor: Mollowa harmoniczna
-        MelodicMinor: Mollowa melodyczna
+        Minor: Molowa
+        HarmonicMinor: Molowa harmoniczna
+        MelodicMinor: Molowa melodyczna
         MajorPentatonic: Pentatoniczna durowa
-        MinorPentatonic: Pentatoniczna mollowa
+        MinorPentatonic: Pentatoniczna molowa
         Blues: Bluesowa
         WholeTone: Całotonowa
         Chromatic: Chromatyczna
     index:
         info: Aplikacja Ear trainer pozwala na naukę rozpoznawania dźwięków, interwałów, akordów i skal. Wybierz w zakładce kurs, który chcesz rozpocząć.
         info_masters_degree: "Autorem niniejszej aplikacji jest Bazyli Bednarz. Serwis ten stanowi integralną część pracy magisterskiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem prof. Mariusza Flasińskiego na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego."
-
+    relativePitchSoundAnswer:
+        FirstHigher: Pierwszy dźwięk jest wyższy
+        SecondHigher: Drugi dźwięk jest wyższy
+        Equal: Dźwięki są identyczne
+    answer:
+        correct: Poprawna odpowiedź! +%points% pkt!
+        incorrect: Niepoprawna odpowiedź! Powtórz ćwiczenie.
+        incorrectEdgeInterval: Częściowo niepoprawna odpowiedź! Interwały pomiędzy skrajnymi dźwiękami są niepoprawne. Powtórz ćwiczenie.
+        incorrectInversion: Częściowo niepoprawna odpowiedź! Wskazany przewrót jest niepoprawny. Powtórz ćwiczenie.

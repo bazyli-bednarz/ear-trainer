@@ -56,6 +56,58 @@ enum NoteEnum: string
     case B6 = 'B6';
     case C7 = 'C7';
 
+    const STRING_TO_INT_MAPPING = [
+        'C3' => 0,
+        'C#3' => 1,
+        'D3' => 2,
+        'D#3' => 3,
+        'E3' => 4,
+        'F3' => 5,
+        'F#3' => 6,
+        'G3' => 7,
+        'G#3' => 8,
+        'A3' => 9,
+        'A#3' => 10,
+        'B3' => 11,
+        'C4' => 12,
+        'C#4' => 13,
+        'D4' => 14,
+        'D#4' => 15,
+        'E4' => 16,
+        'F4' => 17,
+        'F#4' => 18,
+        'G4' => 19,
+        'G#4' => 20,
+        'A4' => 21,
+        'A#4' => 22,
+        'B4' => 23,
+        'C5' => 24,
+        'C#5' => 25,
+        'D5' => 26,
+        'D#5' => 27,
+        'E5' => 28,
+        'F5' => 29,
+        'F#5' => 30,
+        'G5' => 31,
+        'G#5' => 32,
+        'A5' => 33,
+        'A#5' => 34,
+        'B5' => 35,
+        'C6' => 36,
+        'C#6' => 37,
+        'D6' => 38,
+        'D#6' => 39,
+        'E6' => 40,
+        'F6' => 41,
+        'F#6' => 42,
+        'G6' => 43,
+        'G#6' => 44,
+        'A6' => 45,
+        'A#6' => 46,
+        'B6' => 47,
+        'C7' => 48,
+    ];
+
     public static function options(): array
     {
         return [
@@ -109,6 +161,18 @@ enum NoteEnum: string
             self::B6,
             self::C7,
         ];
+    }
+
+    public static function getIndex(self $note): int
+    {
+        return self::STRING_TO_INT_MAPPING[$note->value];
+    }
+
+    public static function fromInt(int $interval): self
+    {
+        return self::from(
+            array_flip(self::STRING_TO_INT_MAPPING)[$interval]
+        );
     }
 
     public static function choosableOptions(): array

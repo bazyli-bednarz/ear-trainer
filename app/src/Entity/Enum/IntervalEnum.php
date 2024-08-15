@@ -91,6 +91,25 @@ enum IntervalEnum: string
         ];
     }
 
+    public static function simpleIntervalsOptions(): array
+    {
+        return [
+            self::PerfectUnison,
+            self::MinorSecond,
+            self::MajorSecond,
+            self::MinorThird,
+            self::MajorThird,
+            self::PerfectFourth,
+            self::Tritone,
+            self::PerfectFifth,
+            self::MinorSixth,
+            self::MajorSixth,
+            self::MinorSeventh,
+            self::MajorSeventh,
+            self::PerfectOctave,
+        ];
+    }
+
     public static function optionsForIntervalChain(): array
     {
         return [
@@ -109,6 +128,11 @@ enum IntervalEnum: string
        return self::from(
            array_flip(self::STRING_TO_INT_MAPPING)[$interval]
        );
+    }
+
+    public static function getHalfSteps(self $interval): int
+    {
+        return self::STRING_TO_INT_MAPPING[$interval->value];
     }
 
     public function trans(TranslatorInterface $translator): string

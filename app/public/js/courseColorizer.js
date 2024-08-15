@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const root = document.querySelector(':root');
-            console.log(`#${asciiSum}`);
             root.style.setProperty('--custom-background-color', `#${asciiSum}`);
             root.style.setProperty('--custom-color', `${invertColor(asciiSum, true)}`);
         })

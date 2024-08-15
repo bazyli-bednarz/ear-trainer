@@ -3,7 +3,9 @@
 namespace App\Service\Task;
 
 use App\Dto\Task\TaskDto;
+use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\TaskTypeEnum;
+use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Entity\Task\FourNoteChord;
@@ -143,6 +145,20 @@ class TaskService implements TaskServiceInterface
             ->setIsSecondHarmonic($dto->isSecondHarmonic())
         ;
 
+        if ($dto->getTwoIntervalsType() === TwoIntervalsTypeEnum::IntervalSquare) {
+            if (
+                abs($dto->getFirstNoteIndex() - $dto->getSecondNoteIndex()) >= count(IntervalEnum::options())
+                || abs($dto->getThirdNoteIndex() - $dto->getFourthNoteIndex()) >= count(IntervalEnum::options())
+            )
+            {
+                $task->setTwoIntervalsTypeEnum(TwoIntervalsTypeEnum::Normal);
+            } else {
+                $task->setTwoIntervalsTypeEnum(TwoIntervalsTypeEnum::IntervalSquare);
+            }
+        } else {
+            $task->setTwoIntervalsTypeEnum($dto->getTwoIntervalsType());
+        }
+
         return $task;
     }
 
@@ -227,7 +243,22 @@ class TaskService implements TaskServiceInterface
                     ->setFirstIntervalType($dto->getFirstIntervalType())
                     ->setSecondIntervalType($dto->getSecondIntervalType())
                     ->setIsFirstHarmonic($dto->isFirstHarmonic())
-                    ->setIsSecondHarmonic($dto->isSecondHarmonic());
+                    ->setIsSecondHarmonic($dto->isSecondHarmonic())
+                ;
+
+                if ($dto->getTwoIntervalsType() === TwoIntervalsTypeEnum::IntervalSquare) {
+                    if (
+                        abs($dto->getFirstNoteIndex() - $dto->getSecondNoteIndex()) >= count(IntervalEnum::options())
+                        || abs($dto->getThirdNoteIndex() - $dto->getFourthNoteIndex()) >= count(IntervalEnum::options())
+                    )
+                    {
+                        $task->setTwoIntervalsTypeEnum(TwoIntervalsTypeEnum::Normal);
+                    } else {
+                        $task->setTwoIntervalsTypeEnum(TwoIntervalsTypeEnum::IntervalSquare);
+                    }
+                } else {
+                    $task->setTwoIntervalsTypeEnum($dto->getTwoIntervalsType());
+                }
                 break;
             case TaskTypeEnum::IntervalChain:
                 /** @var IntervalChain $task */

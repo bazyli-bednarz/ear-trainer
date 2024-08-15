@@ -1,0 +1,27 @@
+{#
+parameters:
+- firstNote: First note of the chord.
+- secondNote: Second note of the chord.
+- thirdNote: Third note of the chord.
+- fourthNote: Fourth note of the chord.
+- isHarmonic: Boolean value to determine if the notes are played together.
+- form: Form to submit the answer.
+#}
+
+<div class="task task--three-note-chord" data-first-note="{{ firstNote }}" data-second-note="{{ secondNote }}"
+     data-third-note="{{ thirdNote }}" data-fourth-note="{{ fourthNote }}" data-is-harmonic="{{ isHarmonic }}">
+    <button id="play-button" disabled class="disabled" aria-label="{{ 'ui.action.play' }}"><i
+                class="bi bi-hourglass"></i></button>
+    <div class="answer mt-5">
+        {{ form_start(form) }}
+        <div class="three-note-chord-answer">
+            <div>
+                {{ form_label(form.fourNoteChordAnswer) }}
+                {{ form_widget(form.fourNoteChordAnswer) }}
+            </div>
+        </div>
+
+        {{ form_widget(form.check) }}
+        {{ form_end(form) }}
+    </div>
+</div>

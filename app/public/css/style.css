@@ -323,3 +323,166 @@ h1.custom-underline {
     text-decoration-thickness: 3px;
     text-decoration-style: dashed;
 }
+
+#play-button {
+    margin: auto;
+    border: 3px solid var(--light-color);
+    background: transparent;
+    border-radius: 50%;
+    color: var(--light-color);
+    transition: 0.3s;
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#play-button:hover {
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+#play-button i {
+    font-size: 4.5rem;
+    transition: 0.3s;
+}
+
+#play-button i.bi-play-fill {
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeOut {
+    animation: fadeOut 0.5s;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.answer form[name="answer"] > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+
+
+.answer .form-check {
+    padding-left: 0;
+    display: block;
+    width: 100%;
+}
+
+.answer .form-check label {
+    border: 3px solid var(--secondary-color);
+    color: var(--light-color);
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.answer .form-check input {
+    transform: translateX(-1000vw);
+}
+
+.answer .form-check input:checked + label {
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+
+.answer button[type="submit"] {
+    background: var(--success-color);
+    color: var(--light-color);
+    border: 3px solid var(--success-color);
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: 0.3s;
+    cursor: pointer;
+    margin: 20px auto;
+    width: 100%;
+    min-width: 200px;
+    display: block;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@media (min-width: 768px) {
+    .answer form[name="answer"] > div {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        justify-content: center;
+    }
+
+    .answer .form-check {
+        width: auto
+    }
+
+    .answer button[type="submit"] {
+        width: auto;
+    }
+}
+
+.task.task--two-intervals .answer .two-intervals-answer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.task.task--two-intervals .answer .two-intervals-answer > div {
+    width: 100%;
+}
+
+.task.task--two-intervals .answer .two-intervals-answer select {
+    width: 100%;
+}
+
+.task.task--two-intervals .answer .two-intervals-answer .col-sm-2 {
+    width: auto;
+}
+
+@media (min-width: 768px) {
+    .task.task--two-intervals .answer .two-intervals-answer {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+}
+
+
+.three-note-chord-answer > div {
+    width: 100%;
+}
+@media (min-width: 768px) {
+
+    .answer form[name="answer"] .three-note-chord-answer  {
+        display: block;
+    }
+    .three-note-chord-answer > div > div {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        margin: auto;
+        gap: 10px;
+    }
+}

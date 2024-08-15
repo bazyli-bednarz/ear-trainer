@@ -43,6 +43,7 @@ class ThreeNoteChordType extends AbstractTaskType
                     'label' => 'ui.task.inversion',
                     'required' => true,
                     'class' => InversionTypeEnum::class,
+                    'choices' => InversionTypeEnum::threeNoteChordOptions(),
                     'choice_label' => fn(InversionTypeEnum $inversion) => $inversion->trans($this->translator),
                 ])
             ->add(
