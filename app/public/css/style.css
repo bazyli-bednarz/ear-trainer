@@ -12,6 +12,19 @@
     --custom-color: var(--light-color);
 }
 
+body > .wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+@supports (min-height: 100dvh) {
+    body > .wrapper {
+        min-height: 100dvh;
+    }
+}
+
 .custom-background-color {
     background-color: var(--custom-background-color) !important;
 }
@@ -485,4 +498,20 @@ h1.custom-underline {
         margin: auto;
         gap: 10px;
     }
+}
+
+.login-form {
+    border: 3px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.login-form .col-sm-2 {
+    width: auto;
+}
+
+.login-form .form-check {
+    margin: 15px 0;
 }

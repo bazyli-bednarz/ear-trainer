@@ -1,36 +1,61 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url('index') }}">Ear trainer</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
-                {% include "partials/_menu-link.html.twig" with {
-                    id: 'index',
-                    icon: 'bi bi-house-fill',
-                    url_path: 'index',
-                    label: 'ui.sidebar.home.label',
-                } only %}
-                {% set dropdown = [] %}
-                {% for item in courses %}
-                    {% set dropdown = dropdown|merge([{url_path: 'course_show', url_parameters: { 'slug': item.slug }, label: item.name}]) %}
-                {% endfor %}
-                {% include "partials/_menu-link.html.twig" with {
-                    id: 'courses',
-                    icon: 'bi bi-book-half',
-                    url_path: 'course_index',
-                    label: 'ui.sidebar.courses.label',
-                    first_item_label: 'ui.sidebar.courses.about',
-                    dropdown: dropdown,
-                } only %}
-                {% include "partials/_menu-link.html.twig" with {
-                    id: 'ranking',
-                    icon: 'bi bi-award',
-                    label: 'ui.sidebar.ranking.label',
-                } only %}
+                {% if app.user %}
+                    {% include "partials/_menu-link.html.twig" with {
+                        id: 'index',
+                        icon: 'bi bi-house-fill',
+                        url_path: 'index',
+                        label: 'ui.sidebar.home.label',
+                    } only %}
+
+                    {% set dropdown = [] %}
+                    {% for item in courses %}
+                        {% set dropdown = dropdown|merge([{url_path: 'course_show', url_parameters: { 'slug': item.slug }, label: item.name}]) %}
+                    {% endfor %}
+                    {% include "partials/_menu-link.html.twig" with {
+                        id: 'courses',
+                        icon: 'bi bi-book-half',
+                        url_path: 'course_index',
+                        label: 'ui.sidebar.courses.label',
+                        first_item_label: 'ui.sidebar.courses.about',
+                        dropdown: dropdown,
+                    } only %}
+                    {% include "partials/_menu-link.html.twig" with {
+                        id: 'ranking',
+                        icon: 'bi bi-award',
+                        label: 'ui.sidebar.ranking.label',
+                    } only %}
+                {% endif %}
             </ul>
         </div>
+
+        <div class="d-flex">
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="text-white me-2">{{ app.user.username }}</div>
+                <div>
+
+                    <a class="text-white" href="{{ url('app_logout') }}" title="{{ 'ui.action.logout'|trans }}"><i
+                                class="bi bi-box-arrow-right"></i></a>
+                </div>
+            {% else %}
+                <div>
+                    <a class="text-white btn" href="{{ url('app_login') }}">{{ 'ui.action.login'|trans }}</a>
+                </div>
+                <div>
+                    <a class="text-white btn btn-primary"
+                       href="{{ url('app_register') }}">{{ 'ui.action.register'|trans }}</a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if app.user %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        {% endif %}
     </div>
 </nav>

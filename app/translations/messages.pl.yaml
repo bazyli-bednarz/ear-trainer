@@ -17,6 +17,9 @@ ui:
             create: Dodaj nowe zadanie
             edit: Edytuj zadanie %name%
             delete: Usunąć zadanie %name%?
+        security:
+            login: Logowanie
+            register: Rejestracja
     sidebar:
         home:
             label: Strona główna
@@ -42,6 +45,10 @@ ui:
             course: Usuń kurs
             node: Usuń lekcję
             task: Usuń
+        login: Zaloguj się
+        logout: Wyloguj się
+        register: Zarejestruj się
+        signUp: Dołącz do Ear trainer!
     message:
         created:
             course: Kurs %name% został dodany
@@ -58,6 +65,12 @@ ui:
         form_error: Wystąpił błąd przy wypełnianiu formularza.
         finished:
             node: Gratulacje! Ukończyłeś lekcję %name%.
+        badCredentials: Nieprawidłowe dane logowania.
+        registeredSuccessfully: Zarejestrowano pomyślnie. Witaj w Ear trainer, %name%!
+        loggedInAs: Jesteś zalogowany jako
+        alreadyHaveAccount: Masz już konto?
+        dontHaveAccount: Nie masz jeszcze konta?
+        successfulLogin: Zalogowano pomyślnie.
     course:
         name: Nazwa
         description: Opis
@@ -224,3 +237,13 @@ ui:
         incorrect: Niepoprawna odpowiedź! Powtórz ćwiczenie.
         incorrectEdgeInterval: Częściowo niepoprawna odpowiedź! Interwały pomiędzy skrajnymi dźwiękami są niepoprawne. Powtórz ćwiczenie.
         incorrectInversion: Częściowo niepoprawna odpowiedź! Wskazany przewrót jest niepoprawny. Powtórz ćwiczenie.
+    security:
+        signIn: Zaloguj się do Ear trainer
+        email: Adres e-mail
+        password: Hasło
+        youAreLoggedInAs: Jesteś zalogowany jako
+    user:
+        email: Adres e-mail
+        password: Hasło
+        username: Nazwa użytkownika
+        agreeToTerms: Akceptuję regulamin użytkowania serwisu i Politykę Prywatności.
