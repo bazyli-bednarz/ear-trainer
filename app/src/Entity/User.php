@@ -56,9 +56,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: TaskStatistic::class, orphanRemoval: true)]
     private Collection $taskStatistics;
 
+    /**
+     * @var Collection<int, Award>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Award::class, orphanRemoval: true)]
+    private Collection $awards;
+
     public function __construct()
     {
         $this->taskStatistics = new ArrayCollection();
+        $this->awards = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -179,6 +186,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($taskStatistic->getUser() === $this) {
                 $taskStatistic->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Award>
+     */
+    public function getAwards(): Collection
+    {
+        return $this->awards;
+    }
+
+    public function addAward(Award $award): static
+    {
+        if (!$this->awards->contains($award)) {
+            $this->awards->add($award);
+            $award->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAward(Award $award): static
+    {
+        if ($this->awards->removeElement($award)) {
+            // set the owning side to null (unless already changed)
+            if ($award->getUser() === $this) {
+                $award->setUser(null);
             }
         }
 

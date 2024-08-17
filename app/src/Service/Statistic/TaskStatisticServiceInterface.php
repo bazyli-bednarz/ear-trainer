@@ -11,6 +11,7 @@ interface TaskStatisticServiceInterface
 {
 
     public function getTaskStatisticsByUser(User $user, int $taskId): array;
+    public function countTaskStatisticsByUser(User $user): int;
     public function addStatistic(User $user, AbstractTask $task): TaskStatistic;
     public function determinePoints(User $user, AbstractTask $task): int;
 

@@ -7,16 +7,17 @@ use App\Dto\Course\CreateCourseDto;
 use App\Dto\Course\EditCourseDto;
 use App\Entity\Course;
 use App\Entity\Node;
+use App\Entity\User;
 use App\Repository\CourseRepository;
-use Doctrine\ORM\EntityManager;
+use App\Service\Node\NodeServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 
 class CourseService implements CourseServiceInterface
 {
     public function __construct(
-        private readonly CourseRepository $courseRepository,
+        private readonly CourseRepository       $courseRepository,
         private readonly EntityManagerInterface $em,
+        private readonly NodeServiceInterface   $nodeService,
     )
     {
     }
@@ -63,5 +64,23 @@ class CourseService implements CourseServiceInterface
     {
         $this->em->remove($course);
         $this->em->flush();
+    }
+
+    public function hasUserCompletedAllNodes(User $user, Course $course): bool
+    {
+        $nodes = $course->getNodes();
+
+        if (empty($nodes)) {
+            return false;
+        }
+
+        /** @var Node $node */
+        foreach ($nodes as $node) {
+            if (!$this->nodeService->isNodeCompleted($node, $user)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

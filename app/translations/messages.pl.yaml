@@ -62,6 +62,7 @@ ui:
             course: Kurs %name% został usunięty
             node: Lekcja %name% została usunięta
             task: Zadanie %name% zostało usunięte
+        awarded: "Zdobywasz nagrodę: %name%! +%points% pkt!"
         form_error: Wystąpił błąd przy wypełnianiu formularza.
         finished:
             node: Gratulacje! Ukończyłeś lekcję %name%.
@@ -253,3 +254,7 @@ ui:
         password: Hasło
         username: Nazwa użytkownika
         agreeToTerms: Akceptuję regulamin użytkowania serwisu i Politykę Prywatności.
+    award:
+        CompletedFirstTask: Ukończono pierwsze zadanie
+        CompletedFirstNode: Ukończono pierwszą lekcję
+        CompletedFirstCourse: Ukończono pierwszy kurs

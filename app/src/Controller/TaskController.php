@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Dto\Task\TaskDto;
 use App\Dto\TaskAnswer\TaskAnswerDto;
 use App\Entity\Course;
+use App\Entity\Enum\AwardEnum;
 use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Entity\Task\Interval;
+use App\Entity\User;
 use App\Form\Type\Task\AbstractTaskType;
 use App\Form\Type\Task\FourNoteChordType;
 use App\Form\Type\Task\IntervalChainType;
@@ -24,12 +26,14 @@ use App\Form\Type\TaskAnswer\RelativePitchSoundAnswerType;
 use App\Form\Type\TaskAnswer\ScaleAnswerType;
 use App\Form\Type\TaskAnswer\ThreeNoteChordAnswerType;
 use App\Form\Type\TaskAnswer\TwoIntervalsAnswerType;
+use App\Service\Award\AwardServiceInterface;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
 use App\Service\Statistic\TaskStatisticServiceInterface;
 use App\Service\Task\TaskServiceInterface;
 use App\Service\TaskAnswer\TaskAnswerServiceInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,6 +50,9 @@ class TaskController extends AbstractBaseController
         private readonly NodeServiceInterface          $nodeService,
         private readonly TaskServiceInterface          $taskService,
         private readonly TaskAnswerServiceInterface    $taskAnswerService,
+        private readonly TaskStatisticServiceInterface $taskStatisticService,
+        private readonly AwardServiceInterface         $awardService,
+        private readonly Security                      $security,
     )
     {
         parent::__construct($courseService, $translator);
@@ -247,6 +254,8 @@ class TaskController extends AbstractBaseController
         Request                                                    $request
     ): Response
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
         $nextTask = $task->getNextTask();
 
         $formType = match ($task->getType()) {
@@ -287,20 +296,54 @@ class TaskController extends AbstractBaseController
                 $feedback->getFeedback(),
             );
 
+            if ($feedback->getIsCorrect()) {
+                $award = $this->awardService->addAward($user, AwardEnum::CompletedFirstTask);
+                if ($award) {
+                    $this->addFlash(
+                        'success',
+                        $this->translator->trans('ui.message.awarded', [
+                                '%name%' => $award->getType()->trans($this->translator),
+                                '%points%' => AwardEnum::getPoints($award->getType())
+                            ]
+                        )
+                    );
+                }
+            }
+
+
+            if ($feedback->getIsCorrect() && $this->taskStatisticService->getCompletedTasksCountForNode($node, $user) === count($node->getTasks())) {
+                $award = $this->awardService->addAward($user, AwardEnum::CompletedFirstNode);
+                if ($award) {
+                    $this->addFlash(
+                        'success',
+                        $this->translator->trans('ui.message.awarded', [
+                                '%name%' => $award->getType()->trans($this->translator),
+                                '%points%' => AwardEnum::getPoints($award->getType())
+                            ]
+                        )
+                    );
+                }
+            }
+
+            if ($feedback->getIsCorrect() && $this->courseService->hasUserCompletedAllNodes($user, $course)) {
+                $award = $this->awardService->addAward($user, AwardEnum::CompletedFirstCourse);
+                if ($award) {
+                    $this->addFlash(
+                        'success',
+                        $this->translator->trans('ui.message.awarded', [
+                                '%name%' => $award->getType()->trans($this->translator),
+                                '%points%' => AwardEnum::getPoints($award->getType())
+                            ]
+                        )
+                    );
+                }
+            }
+
             if ($feedback->getIsCorrect() && $nextTask) {
                 return $this->redirectToRoute('task_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug(), 'taskSlug' => $nextTask->getSlug()]);
             }
 
             if ($feedback->getIsCorrect() && !$nextTask) {
-
-                $this->addFlash(
-                    'success',
-                    $this->translator->trans(
-                        'ui.message.finished.node',
-                        ['%name%' => $node->getName()]
-                    )
-                );
-
                 return $this->redirectToRoute('node_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug()]);
             }
 

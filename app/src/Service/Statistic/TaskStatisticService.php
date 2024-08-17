@@ -43,6 +43,11 @@ class TaskStatisticService implements TaskStatisticServiceInterface
         return $this->taskStatisticRepository->getTaskStatisticsByUser($user, $taskId);
     }
 
+    public function countTaskStatisticsByUser(User $user): int
+    {
+        return count($this->taskStatisticRepository->findBy(['user' => $user]));
+    }
+
     public function addStatistic(User $user, AbstractTask $task): TaskStatistic
     {
         $taskStatistic = new TaskStatistic();
@@ -79,6 +84,6 @@ class TaskStatisticService implements TaskStatisticServiceInterface
             }
         }
 
-        return $completedTasksCount;
+        return min($completedTasksCount, count($node->getTasks()));
     }
 }
