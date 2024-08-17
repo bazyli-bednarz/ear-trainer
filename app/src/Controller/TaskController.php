@@ -29,6 +29,7 @@ use App\Form\Type\TaskAnswer\TwoIntervalsAnswerType;
 use App\Service\Award\AwardServiceInterface;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
+use App\Service\Statistic\ExperienceStatisticServiceInterface;
 use App\Service\Statistic\TaskStatisticServiceInterface;
 use App\Service\Task\TaskServiceInterface;
 use App\Service\TaskAnswer\TaskAnswerServiceInterface;
@@ -47,15 +48,16 @@ class TaskController extends AbstractBaseController
     public function __construct(
         CourseServiceInterface                         $courseService,
         TranslatorInterface                            $translator,
+        ExperienceStatisticServiceInterface            $experienceStatisticService,
+        AwardServiceInterface                          $awardService,
         private readonly NodeServiceInterface          $nodeService,
         private readonly TaskServiceInterface          $taskService,
         private readonly TaskAnswerServiceInterface    $taskAnswerService,
         private readonly TaskStatisticServiceInterface $taskStatisticService,
-        private readonly AwardServiceInterface         $awardService,
         private readonly Security                      $security,
     )
     {
-        parent::__construct($courseService, $translator);
+        parent::__construct($courseService, $translator, $experienceStatisticService, $awardService);
     }
 
 
@@ -295,6 +297,10 @@ class TaskController extends AbstractBaseController
                 $feedback->getIsCorrect() ? 'success' : 'danger',
                 $feedback->getFeedback(),
             );
+
+            if ($feedback->getIsCorrect()) {
+                $this->experienceStatisticService->addExperience($user, $feedback->getPoints());
+            }
 
             if ($feedback->getIsCorrect()) {
                 $award = $this->awardService->addAward($user, AwardEnum::CompletedFirstTask);

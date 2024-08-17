@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const delay = isHarmonic ? 0 : 1;
+    const delay = isHarmonic ? 0 : 0.2;
 
-    const duration = isHarmonic ? '3s' : '2n';
+    const duration = isHarmonic ? '3s' : '4n';
 
     playButton.classList.remove('disabled');
     playButton.removeAttribute('disabled');

@@ -12,5 +12,7 @@ use App\Entity\User;
 interface AwardServiceInterface
 {
     public function getAwardsForUser(User $user): array;
+    public function getLastAwardsForUser(User $user, int $limit = 3): array;
+
     public function addAward(User $user, AwardEnum $type): ?Award;
 }

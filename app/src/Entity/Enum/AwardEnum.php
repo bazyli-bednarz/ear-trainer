@@ -22,9 +22,9 @@ enum AwardEnum: string
     public static function getIcon(self $award): string
     {
         return match ($award) {
-            self::CompletedFirstTask => 'bi bi-1-square',
-            self::CompletedFirstNode => 'bi bi-award',
-            self::CompletedFirstCourse => 'bi bi-award-fill',
+            self::CompletedFirstTask => 'bi bi-award-fill',
+            self::CompletedFirstNode => 'fa-solid fa-medal',
+            self::CompletedFirstCourse => 'fa-solid fa-trophy',
         };
     }
 

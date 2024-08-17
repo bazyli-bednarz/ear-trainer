@@ -8,8 +8,11 @@ use App\Entity\Course;
 use App\Entity\User;
 use App\Form\Type\Course\CreateCourseType;
 use App\Form\Type\Course\EditCourseType;
+use App\Service\Award\AwardServiceInterface;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
+use App\Service\Statistic\ExperienceStatisticService;
+use App\Service\Statistic\ExperienceStatisticServiceInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,11 +27,13 @@ class CourseController extends AbstractBaseController
     public function __construct(
         CourseServiceInterface                $courseService,
         TranslatorInterface                   $translator,
+        ExperienceStatisticServiceInterface   $experienceStatisticService,
+        AwardServiceInterface                 $awardService,
         private readonly NodeServiceInterface $nodeService,
         private readonly Security             $security,
     )
     {
-        parent::__construct($courseService, $translator);
+        parent::__construct($courseService, $translator, $experienceStatisticService, $awardService);
     }
 
     #[Route('/', name: 'course_index', methods: ['GET'])]

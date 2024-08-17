@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Repository\AwardRepository;
 use App\Repository\CourseRepository;
 use App\Service\Course\CourseServiceInterface;
+use App\Service\Statistic\ExperienceStatisticService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -20,8 +21,9 @@ use Knp\Component\Pager\PaginatorInterface;
 class AwardService implements AwardServiceInterface
 {
     public function __construct(
-        private readonly EntityManagerInterface $em,
-        private readonly AwardRepository $awardRepository,
+        private readonly EntityManagerInterface     $em,
+        private readonly AwardRepository            $awardRepository,
+        private readonly ExperienceStatisticService $experienceStatisticService,
     )
     {
     }
@@ -29,6 +31,11 @@ class AwardService implements AwardServiceInterface
     public function getAwardsForUser(User $user): array
     {
         return $this->awardRepository->findBy(['user' => $user]);
+    }
+
+    public function getLastAwardsForUser(User $user, int $limit = 3): array
+    {
+        return array_reverse($this->awardRepository->findBy(['user' => $user], ['createdAt' => 'DESC'], $limit));
     }
 
     public function addAward(User $user, AwardEnum $type): ?Award
@@ -42,6 +49,8 @@ class AwardService implements AwardServiceInterface
         $award->setUser($user);
         $this->em->persist($award);
         $this->em->flush();
+
+        $this->experienceStatisticService->addExperience($user, AwardEnum::getPoints($type));
 
         return $award;
     }

@@ -9,8 +9,10 @@ use App\Entity\Node;
 use App\Entity\User;
 use App\Form\Type\Node\CreateNodeType;
 use App\Form\Type\Node\EditNodeType;
+use App\Service\Award\AwardServiceInterface;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
+use App\Service\Statistic\ExperienceStatisticServiceInterface;
 use App\Service\Task\TaskServiceInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -27,12 +29,14 @@ class NodeController extends AbstractBaseController
     public function __construct(
         CourseServiceInterface                $courseService,
         TranslatorInterface                   $translator,
+        ExperienceStatisticServiceInterface   $experienceStatisticService,
+        AwardServiceInterface                 $awardService,
         private readonly NodeServiceInterface $nodeService,
         private readonly TaskServiceInterface $taskService,
         private readonly Security             $security,
     )
     {
-        parent::__construct($courseService, $translator);
+        parent::__construct($courseService, $translator, $experienceStatisticService, $awardService);
     }
 
     #[isGranted("ROLE_ADMIN")]

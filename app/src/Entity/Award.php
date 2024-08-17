@@ -44,4 +44,14 @@ class Award
 
         return $this;
     }
+
+    public function getIcon(): string
+    {
+        return AwardEnum::getIcon($this->type);
+    }
+
+    public function getLabel(): string
+    {
+        return 'ui.award.' . $this->type->value;
+    }
 }

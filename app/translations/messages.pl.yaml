@@ -75,6 +75,7 @@ ui:
     course:
         name: Nazwa
         description: Opis
+        about: Wybierz jeden z poniższych kursów, aby rozpocząć naukę. Każdy kurs składa się z lekcji, które zawierają zadania do wykonania. Za każde poprawne wykonanie zadania zdobywasz punkty (możesz powtórzyć zadanie, jednak każde kolejne jego rozwiązanie będzie dawało odpowiednio mniej punktów). W zakładce ranking znajdziesz listę użytkowników, którzy zdobyli najwięcej punktów. Powodzenia!
     node:
         name: Nazwa lekcji
         description: Krótki opis wyświetlany przy lekcji
