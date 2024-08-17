@@ -7,9 +7,11 @@ use App\Dto\TaskAnswer\AnswerFeedbackDto;
 use App\Dto\TaskAnswer\TaskAnswerDto;
 use App\Entity\Enum\ThreeNoteChordTypeEnum;
 use App\Entity\Enum\TwoIntervalsTypeEnum;
+use App\Entity\User;
+use App\Service\Statistic\TaskStatisticServiceInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Entity\Enum\TaskTypeEnum;
-use App\Entity\Node;
 use App\Entity\Task\AbstractTask;
 use App\Entity\Task\FourNoteChord;
 use App\Entity\Task\Interval;
@@ -19,16 +21,16 @@ use App\Entity\Task\Scale;
 use App\Entity\Task\ThreeNoteChord;
 use App\Entity\Task\TwoIntervals;
 use App\Repository\AbstractTaskRepository;
-use App\Service\Task\TaskServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use function Symfony\Component\Translation\t;
 
 class TaskAnswerService implements TaskAnswerServiceInterface
 {
     public function __construct(
-        private readonly AbstractTaskRepository $abstractTaskRepository,
-        private readonly EntityManagerInterface $em,
-        private readonly TranslatorInterface    $translator,
+        private readonly AbstractTaskRepository        $abstractTaskRepository,
+        private readonly EntityManagerInterface        $em,
+        private readonly TranslatorInterface           $translator,
+        private readonly TaskStatisticServiceInterface $taskStatisticService,
+        private readonly Security                      $security,
     )
     {
     }
@@ -69,15 +71,25 @@ class TaskAnswerService implements TaskAnswerServiceInterface
                 throw new \InvalidArgumentException('Invalid task type');
         }
 
+        /** @var User $user */
+        $user = $this->security->getUser();
+
+        if ($feedback->getIsCorrect()) {
+            $this->taskStatisticService->addStatistic($user, $task);
+        }
+
         return $feedback;
     }
 
     private function handleRelativePitchSoundAnswer(TaskAnswerDto $dto, RelativePitchSound $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
         if ($task->getCorrectAnswer() === $dto->getRelativePitchSoundAnswer()) {
             $feedback = 'ui.answer.correct';
             $isCorrect = true;
-            $points = $task->getPoints();
+            $points = $this->taskStatisticService->determinePoints($user, $task);
         } else {
             $feedback = 'ui.answer.incorrect';
             $isCorrect = false;
@@ -93,10 +105,13 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
     private function handleIntervalAnswer(TaskAnswerDto $dto, Interval $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
         if ($task->getIntervalType() === $dto->getIntervalAnswer()) {
             $feedback = 'ui.answer.correct';
             $isCorrect = true;
-            $points = $task->getPoints();
+            $points = $this->taskStatisticService->determinePoints($user, $task);
         } else {
             $feedback = 'ui.answer.incorrect';
             $isCorrect = false;
@@ -112,6 +127,9 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
     private function handleTwoIntervalsAnswer(TaskAnswerDto $dto, TwoIntervals $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
+
         if ($task->getTwoIntervalsTypeEnum() === TwoIntervalsTypeEnum::IntervalSquare) {
             $isFirstIntervalCorrect = $task->getFirstIntervalType() === $dto->getFirstIntervalAnswer();
             $isSecondIntervalCorrect = $task->getSecondIntervalType() === $dto->getSecondIntervalAnswer();
@@ -126,7 +144,7 @@ class TaskAnswerService implements TaskAnswerServiceInterface
                 && $isLowerEdgeIntervalCorrect
             ) {
                 $feedback = 'ui.answer.correct';
-                $points = $task->getPoints();
+                $points = $this->taskStatisticService->determinePoints($user, $task);
 
                 return new AnswerFeedbackDto(
                     $this->translator->trans($feedback, ['%points%' => $points]),
@@ -169,7 +187,8 @@ class TaskAnswerService implements TaskAnswerServiceInterface
             ) {
                 $feedback = 'ui.answer.correct';
                 $isCorrect = true;
-                $points = $task->getPoints();
+                $points = $this->taskStatisticService->determinePoints($user, $task);
+
             } else {
                 $feedback = 'ui.answer.incorrect';
                 $isCorrect = false;
@@ -189,10 +208,12 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
     private function handleIntervalChainAnswer(TaskAnswerDto $dto, IntervalChain $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
         if ($task->getIntervalType() === $dto->getIntervalAnswer()) {
             $feedback = 'ui.answer.correct';
             $isCorrect = true;
-            $points = $task->getPoints();
+            $points = $this->taskStatisticService->determinePoints($user, $task);
         } else {
             $feedback = 'ui.answer.incorrect';
             $isCorrect = false;
@@ -209,6 +230,8 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
     private function handleThreeNoteChordAnswer(TaskAnswerDto $dto, ThreeNoteChord $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
         if (
             $task->getShouldStudentRecogniseInversion()
             && $task->getChord() !== ThreeNoteChordTypeEnum::Augmented
@@ -219,7 +242,7 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
             ) {
                 $feedback = 'ui.answer.correct';
-                $points = $task->getPoints();
+                $points = $this->taskStatisticService->determinePoints($user, $task);
 
                 return new AnswerFeedbackDto(
                     $this->translator->trans($feedback, ['%points%' => $points]),
@@ -256,7 +279,7 @@ class TaskAnswerService implements TaskAnswerServiceInterface
         if ($task->getChord() === $dto->getThreeNoteChordAnswer()) {
             $feedback = 'ui.answer.correct';
             $isCorrect = true;
-            $points = $task->getPoints();
+            $points = $this->taskStatisticService->determinePoints($user, $task);
         } else {
             $feedback = 'ui.answer.incorrect';
             $isCorrect = false;
@@ -272,12 +295,14 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
     private function handleFourNoteChordAnswer(TaskAnswerDto $dto, FourNoteChord $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
         if (
             $task->getFourNoteChord() === $dto->getFourNoteChordAnswer()
         ) {
             $feedback = 'ui.answer.correct';
             $isCorrect = true;
-            $points = $task->getPoints();
+            $points = $this->taskStatisticService->determinePoints($user, $task);
         } else {
             $feedback = 'ui.answer.incorrect';
             $isCorrect = false;
@@ -294,12 +319,14 @@ class TaskAnswerService implements TaskAnswerServiceInterface
 
     private function handleScaleAnswer(TaskAnswerDto $dto, Scale $task): AnswerFeedbackDto
     {
+        /** @var User $user */
+        $user = $this->security->getUser();
         if (
             $task->getScaleType() === $dto->getScaleAnswer()
         ) {
             $feedback = 'ui.answer.correct';
             $isCorrect = true;
-            $points = $task->getPoints();
+            $points = $this->taskStatisticService->determinePoints($user, $task);
         } else {
             $feedback = 'ui.answer.incorrect';
             $isCorrect = false;

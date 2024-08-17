@@ -4,30 +4,28 @@ namespace App\Controller;
 
 use App\Dto\Course\CreateCourseDto;
 use App\Dto\Course\EditCourseDto;
-use App\Dto\Node\CreateNodeDto;
-use App\Dto\Node\EditNodeDto;
 use App\Entity\Course;
-use App\Entity\Node;
+use App\Entity\User;
 use App\Form\Type\Course\CreateCourseType;
 use App\Form\Type\Course\EditCourseType;
-use App\Form\Type\Node\CreateNodeType;
-use App\Form\Type\Node\EditNodeType;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/kursy')]
 class CourseController extends AbstractBaseController
 {
     public function __construct(
-        CourseServiceInterface                 $courseService,
-        TranslatorInterface $translator,
-        private readonly NodeServiceInterface  $nodeService,
+        CourseServiceInterface                $courseService,
+        TranslatorInterface                   $translator,
+        private readonly NodeServiceInterface $nodeService,
+        private readonly Security             $security,
     )
     {
         parent::__construct($courseService, $translator);
@@ -39,7 +37,7 @@ class CourseController extends AbstractBaseController
         return $this->render('course/index.html.twig');
     }
 
-
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/{slug}/edytuj',
         name: 'course_update',
@@ -74,6 +72,7 @@ class CourseController extends AbstractBaseController
         );
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/{slug}/usun',
         name: 'course_delete',
@@ -109,11 +108,12 @@ class CourseController extends AbstractBaseController
         );
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/nowy',
         name: 'course_create',
         methods: ['GET', 'POST']
-)]
+    )]
     public function create(Request $request): Response
     {
         $form = $this->createForm(CreateCourseType::class, $dto = new CreateCourseDto());
@@ -147,7 +147,9 @@ class CourseController extends AbstractBaseController
     ]
     public function show(Course $course, Request $request): Response
     {
-        $nodes = $this->nodeService->getNodesForCourse($course);
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $nodes = $this->nodeService->getNodesForCourseWithUserInfo($course, $user);
 
         return $this->render(
             'course/show.html.twig',

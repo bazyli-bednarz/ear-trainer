@@ -84,7 +84,7 @@ ui:
     task:
         number: LP
         name: Nazwa zadania
-        description: Krótki opis wyświetlany przy zadaniu
+        description: Opis
         node: Lekcja
         type: Typ zadania
         firstNote: Pierwsza nuta
@@ -92,8 +92,9 @@ ui:
         scale: Skala
         interval: Interwał
         chord: Akord
-        points: Punkty
+        points: Punkty do zdobycia
         points_number: "%points% pkt"
+        points_original_number: "(za pierwsze podejście: %points% pkt)"
         course: Kurs
         previousTask: Poprzednie zadanie
         firstTask: (pierwsze zadanie)
@@ -113,6 +114,8 @@ ui:
         chordAnswer: Zagrany akord
         inversionAnswer: Przewrót akordu
         scaleAnswer: Zagrana skala
+        completed: Ukończono!
+        not_completed: Nie ukończono
     taskType:
         RelativePitchSound: Relatywna wysokość dźwięku
         Interval: Interwał
@@ -242,6 +245,9 @@ ui:
         email: Adres e-mail
         password: Hasło
         youAreLoggedInAs: Jesteś zalogowany jako
+        loginInfo: Przykładowe dane logowania
+        loginInfoAdmin: Dane administratorów
+        loginInfoUser: Dane użytkowników
     user:
         email: Adres e-mail
         password: Hasło

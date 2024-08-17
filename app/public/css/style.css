@@ -106,10 +106,31 @@ form .col-12 .row > div {
     transform-style: preserve-3d;
 }
 
+.nodes .node.completed-node {
+    border: 10px solid var(--success-color);
+}
+
 .nodes .node i {
     font-size: 5rem;
     line-height: 1;
     transition: 0.3s;
+}
+
+.nodes .node.completed-node h2::after {
+    content: "✅";
+    margin-left: 5px;
+    text-shadow: none;
+}
+
+.nodes .node-progress {
+    font-size: 0.9rem;
+}
+
+.nodes h2,
+.nodes i,
+.nodes .node-progress
+{
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
 }
 
 .nodes .node .node__inner > * {
@@ -137,33 +158,37 @@ form .col-12 .row > div {
     transform: translateX(-20%);
 }
 
-.nodes .node:nth-of-type(odd)::after {
-    /*content: '';*/
-    /*display: block;*/
-    /*z-index: -1;*/
-    /*position: absolute;*/
-    /*border: 4px dashed var(--custom-background-color);*/
-    /*width: clamp(150px, 20vw, 400px);*/
-    /*bottom: 50%;*/
-    /*left: 50%;*/
-    /*transform-origin: 0;*/
-    /*transform: rotate(73deg);*/
+.is-user .nodes .node:nth-of-type(odd)::after {
+    content: '';
+    display: block;
+    z-index: -1;
+    position: absolute;
+    border: 4px dashed var(--custom-background-color);
+    width: clamp(150px, 20vw, 400px);
+    bottom: 50%;
+    left: 50%;
+    transform-origin: 0;
+    transform: rotate(73deg);
 }
 
-.nodes .node:nth-of-type(even)::after {
-    /*content: '';*/
-    /*display: block;*/
-    /*z-index: -1;*/
-    /*position: absolute;*/
-    /*border: 4px dashed var(--custom-background-color);*/
-    /*width: clamp(150px, 20vw, 400px);*/
-    /*bottom: 50%;*/
-    /*left: 50%;*/
-    /*transform-origin: 0;*/
-    /*transform: rotate(107deg);*/
+.is-user .nodes .node:nth-of-type(even)::after {
+    content: '';
+    display: block;
+    z-index: -1;
+    position: absolute;
+    border: 4px dashed var(--custom-background-color);
+    width: clamp(150px, 20vw, 400px);
+    bottom: 50%;
+    left: 50%;
+    transform-origin: 0;
+    transform: rotate(107deg);
 }
 
-.nodes .node.last::after
+.is-user .nodes .node.completed-node::after {
+    border-color: var(--success-color);
+}
+
+.is-user .nodes .node.last::after
 {
     display: none;
 }
@@ -198,6 +223,10 @@ form .col-12 .row > div {
     display: block;
     aspect-ratio: 1;
     overflow: hidden;
+}
+
+.is-user .nodes .inject-new-node {
+    display: none;
 }
 
 .inject-new-node--empty {
@@ -514,4 +543,9 @@ h1.custom-underline {
 
 .login-form .form-check {
     margin: 15px 0;
+}
+
+.login-info > ul {
+    max-width: 500px;
+    margin: 0 auto;
 }

@@ -2,11 +2,16 @@
 
 namespace App\Service\Node;
 
+use App\Dto\Node\NodeWithUserInfoDto;
+use App\Dto\Task\TaskWithUserInfoDto;
 use App\Entity\Course;
 use App\Entity\Node;
+use App\Entity\Task\AbstractTask;
+use App\Entity\User;
 use App\Repository\NodeRepository;
 use App\Dto\Node\CreateNodeDto;
 use App\Dto\Node\EditNodeDto;
+use App\Service\Statistic\TaskStatisticServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class NodeService implements NodeServiceInterface
@@ -14,6 +19,7 @@ class NodeService implements NodeServiceInterface
     public function __construct(
         private readonly NodeRepository         $nodeRepository,
         private readonly EntityManagerInterface $em,
+        private readonly TaskStatisticServiceInterface $taskStatisticService,
     )
     {
     }
@@ -41,6 +47,45 @@ class NodeService implements NodeServiceInterface
         }
 
         return $nodes;
+    }
+
+    public function getNodesForCourseWithUserInfo(Course $course, User $user): array
+    {
+        $nodes = $this->getNodesForCourse($course);
+        $nodesWithUserInfo = [];
+
+        /** @var Node $node */
+        foreach ($nodes as $node) {
+            $nodesWithUserInfo[] = new NodeWithUserInfoDto(
+                $node->getId(),
+                $node->getName(),
+                $node->getSlug(),
+                $node->getDescription(),
+                $this->isNodeCompleted($node, $user),
+                $node->getIcon(),
+                $this->taskStatisticService->getCompletedTasksCountForNode($node, $user),
+                count($node->getTasks())
+            );
+        }
+
+        return $nodesWithUserInfo;
+    }
+
+    public function isNodeCompleted(Node $node, User $user): bool
+    {
+        $tasks = $node->getTasks();
+
+        if (count($tasks) === 0) {
+            return false;
+        }
+
+        foreach ($tasks as $task) {
+            if (!$this->taskStatisticService->isTaskCompletedByUser($user, $task)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function getNodesForCourseExceptGiven(Course $course, Node $node): array

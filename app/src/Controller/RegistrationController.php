@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Enum\UserRole;
 use App\Entity\User;
 use App\Form\Type\Security\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
@@ -32,6 +33,7 @@ class RegistrationController extends AbstractBaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setUsername($form->get('username')->getData());
+            $user->setRoles([UserRole::ROLE_USER]);
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,

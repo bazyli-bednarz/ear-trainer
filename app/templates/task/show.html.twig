@@ -8,19 +8,23 @@
     <div class="d-flex gap-3 mb-3 align-items-center">
         <h1>{{ 'ui.page_header.tasks.show'|trans({'%taskName%': task.name}) }} | {{ course.name }}</h1>
 
-        <a
-                href="{{ url('task_update', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
-                class="btn btn-primary">
-            <i class="bi bi-pencil-square"></i>
-            {{ "ui.action.edit.task"|trans }}
-        </a>
+        {% if is_granted("ROLE_ADMIN") %}
 
-        <a
-                href="{{ url('task_delete', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
-                class="btn btn-danger">
-            <i class="bi bi-trash"></i>
-            {{ "ui.action.delete.task"|trans }}
-        </a>
+            <a
+                    href="{{ url('task_update', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
+                    class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i>
+                {{ "ui.action.edit.task"|trans }}
+            </a>
+
+            <a
+                    href="{{ url('task_delete', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
+                    class="btn btn-danger">
+                <i class="bi bi-trash"></i>
+                {{ "ui.action.delete.task"|trans }}
+            </a>
+
+        {% endif %}
     </div>
 
     {% if task.description %}

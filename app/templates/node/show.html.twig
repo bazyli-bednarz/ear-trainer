@@ -6,17 +6,21 @@
 
 {% block body %}
     <div class="d-flex gap-3 mb-3 align-items-center">
-        <h1 class="custom-underline">{{ 'ui.page_header.nodes.show'|trans({'%nodeName%': node.name}) }} | {{ node.course.name }}</h1>
+        <h1 class="custom-underline">{{ 'ui.page_header.nodes.show'|trans({'%nodeName%': node.name}) }}
+            | {{ node.course.name }}</h1>
 
-        <a href="{{ url('node_update', {'slug': course.slug, 'nodeSlug': node.slug}) }}" class="btn btn-primary">
-            <i class="bi bi-pencil-square"></i>
-            {{ "ui.action.edit.node"|trans }}
-        </a>
+        {% if is_granted("ROLE_ADMIN") %}
 
-        <a href="{{ url('node_delete', {'slug': course.slug, 'nodeSlug': node.slug}) }}" class="btn btn-danger">
-            <i class="bi bi-trash"></i>
-            {{ "ui.action.delete.node"|trans }}
-        </a>
+            <a href="{{ url('node_update', {'slug': course.slug, 'nodeSlug': node.slug}) }}" class="btn btn-primary">
+                <i class="bi bi-pencil-square"></i>
+                {{ "ui.action.edit.node"|trans }}
+            </a>
+
+            <a href="{{ url('node_delete', {'slug': course.slug, 'nodeSlug': node.slug}) }}" class="btn btn-danger">
+                <i class="bi bi-trash"></i>
+                {{ "ui.action.delete.node"|trans }}
+            </a>
+        {% endif %}
     </div>
 
     {% if node.description %}
@@ -57,21 +61,35 @@
                         </td>
                         <td>
                             {{ 'ui.task.points_number'|trans({'%points%': task.points }) }}
+                            {% if task.isCompleted == true %}
+                                {{ 'ui.task.points_original_number'|trans({'%points%': task.originalPoints }) }}
+                            {% endif %}
                         </td>
                         <td>
-                            <a
-                                    href="{{ url('task_update', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
-                                    class="btn btn-primary">
-                                <i class="bi bi-pencil-square"></i>
-                                {{ "ui.action.edit.task"|trans }}
-                            </a>
+                            {% if is_granted("ROLE_ADMIN") %}
 
-                            <a
-                                    href="{{ url('task_delete', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
-                                    class="btn btn-danger">
-                                <i class="bi bi-trash"></i>
-                                {{ "ui.action.delete.task"|trans }}
-                            </a>
+                                <a
+                                        href="{{ url('task_update', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
+                                        class="btn btn-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                    {{ "ui.action.edit.task"|trans }}
+                                </a>
+
+                                <a
+                                        href="{{ url('task_delete', {'slug': course.slug, 'nodeSlug': node.slug, 'taskSlug': task.slug}) }}"
+                                        class="btn btn-danger">
+                                    <i class="bi bi-trash"></i>
+                                    {{ "ui.action.delete.task"|trans }}
+                                </a>
+
+                            {% endif %}
+
+                            {% if task.isCompleted == true %}
+                                <span class="badge bg-success">{{ "ui.task.completed"|trans }}</span>
+                            {% else %}
+                                <span class="badge bg-info">{{ "ui.task.not_completed"|trans }}</span>
+                            {% endif %}
+
                         </td>
                     </tr>
                 {% endfor %}
@@ -80,18 +98,20 @@
         </div>
     {% endif %}
 
-    {% if taskTypes|length %}
-        <div class="container-fluid d-flex justify-content-center inject-new-task__wrapper">
+    {% if is_granted("ROLE_ADMIN") %}
+        {% if taskTypes|length %}
+            <div class="container-fluid d-flex justify-content-center inject-new-task__wrapper">
 
-            {% for taskType in taskTypes %}
+                {% for taskType in taskTypes %}
 
-                <a class="inject-new-task"
-                   href="{{ url('task_create', {'slug': course.slug, 'nodeSlug': node.slug, 'type': taskType.type }) }}"><i
-                            class="bi bi-patch-plus-fill"></i>
-                    <div class="inject-new-task__tooltip">{{ taskType.label }}</div>
-                </a>
+                    <a class="inject-new-task"
+                       href="{{ url('task_create', {'slug': course.slug, 'nodeSlug': node.slug, 'type': taskType.type }) }}"><i
+                                class="bi bi-patch-plus-fill"></i>
+                        <div class="inject-new-task__tooltip">{{ taskType.label }}</div>
+                    </a>
 
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}

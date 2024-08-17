@@ -3,21 +3,25 @@
 namespace App\Entity;
 
 use App\Entity\Enum\UserRole;
+use App\Entity\Statistic\TaskStatistic;
+use App\Entity\Trait\IdTrait;
+use App\Entity\Trait\TimestampableTrait;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
 #[ORM\UniqueConstraint(name: 'email_idx', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    use IdTrait;
+    use TimestampableTrait;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank]
@@ -27,6 +31,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     #[Assert\NotBlank]
     private ?string $username = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Gedmo\Slug(fields: ['username'])]
+    protected ?string $slug = null;
 
     /**
      * @var list<string> The user roles
@@ -41,9 +50,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     private ?string $password = null;
 
-    public function getId(): ?int
+    /**
+     * @var Collection<int, TaskStatistic>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TaskStatistic::class, orphanRemoval: true)]
+    private Collection $taskStatistics;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->taskStatistics = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -124,6 +139,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): static
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TaskStatistic>
+     */
+    public function getTaskStatistics(): Collection
+    {
+        return $this->taskStatistics;
+    }
+
+    public function addTaskStatistic(TaskStatistic $taskStatistic): static
+    {
+        if (!$this->taskStatistics->contains($taskStatistic)) {
+            $this->taskStatistics->add($taskStatistic);
+            $taskStatistic->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskStatistic(TaskStatistic $taskStatistic): static
+    {
+        if ($this->taskStatistics->removeElement($taskStatistic)) {
+            // set the owning side to null (unless already changed)
+            if ($taskStatistic->getUser() === $this) {
+                $taskStatistic->setUser(null);
+            }
+        }
 
         return $this;
     }

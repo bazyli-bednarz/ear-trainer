@@ -3,6 +3,7 @@
 namespace App\Service\Task;
 
 use App\Dto\Task\TaskDto;
+use App\Dto\Task\TaskWithUserInfoDto;
 use App\Entity\Enum\IntervalEnum;
 use App\Entity\Enum\TaskTypeEnum;
 use App\Entity\Enum\TwoIntervalsTypeEnum;
@@ -15,7 +16,9 @@ use App\Entity\Task\RelativePitchSound;
 use App\Entity\Task\Scale;
 use App\Entity\Task\ThreeNoteChord;
 use App\Entity\Task\TwoIntervals;
+use App\Entity\User;
 use App\Repository\AbstractTaskRepository;
+use App\Service\Statistic\TaskStatisticServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TaskService implements TaskServiceInterface
@@ -23,6 +26,7 @@ class TaskService implements TaskServiceInterface
     public function __construct(
         private readonly AbstractTaskRepository       $abstractTaskRepository,
         private readonly EntityManagerInterface       $em,
+        private readonly TaskStatisticServiceInterface $taskStatisticService,
     )
     {
     }
@@ -48,6 +52,28 @@ class TaskService implements TaskServiceInterface
         }
 
         return $tasks;
+    }
+
+    public function getTasksForNodeWithUserInfo(Node $node, User $user): array
+    {
+        $tasks = $this->getTasksForNode($node);
+        $tasksWithUserInfo = [];
+
+        /** @var AbstractTask $task */
+        foreach ($tasks as $task) {
+            $tasksWithUserInfo[] = new TaskWithUserInfoDto(
+                $task->getId(),
+                $task->getName(),
+                $task->getSlug(),
+                $task->getType(),
+                $task->getDescription(),
+                $this->taskStatisticService->determinePoints($user, $task),
+                $task->getPoints(),
+                $this->taskStatisticService->determinePoints($user, $task) !== $task->getPoints(),
+            );
+        }
+
+        return $tasksWithUserInfo;
     }
 
 

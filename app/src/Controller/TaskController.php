@@ -26,6 +26,7 @@ use App\Form\Type\TaskAnswer\ThreeNoteChordAnswerType;
 use App\Form\Type\TaskAnswer\TwoIntervalsAnswerType;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
+use App\Service\Statistic\TaskStatisticServiceInterface;
 use App\Service\Task\TaskServiceInterface;
 use App\Service\TaskAnswer\TaskAnswerServiceInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -33,23 +34,25 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/kursy')]
 class TaskController extends AbstractBaseController
 {
     public function __construct(
-        CourseServiceInterface                $courseService,
-        TranslatorInterface                   $translator,
-        private readonly NodeServiceInterface $nodeService,
-        private readonly TaskServiceInterface $taskService,
-        private readonly TaskAnswerServiceInterface $taskAnswerService,
+        CourseServiceInterface                         $courseService,
+        TranslatorInterface                            $translator,
+        private readonly NodeServiceInterface          $nodeService,
+        private readonly TaskServiceInterface          $taskService,
+        private readonly TaskAnswerServiceInterface    $taskAnswerService,
     )
     {
         parent::__construct($courseService, $translator);
     }
 
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/{slug}/{nodeSlug}/dodaj-zadanie/{type}',
         name: 'task_create',
@@ -118,16 +121,17 @@ class TaskController extends AbstractBaseController
         );
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/{slug}/{nodeSlug}/{taskSlug}/edytuj',
         name: 'task_update',
         methods: ['GET', 'PUT']
     )]
     public function edit(
-        #[MapEntity(mapping: ['slug' => 'slug'])] Course $course,
-        #[MapEntity(mapping: ['nodeSlug' => 'slug'])] Node $node,
+        #[MapEntity(mapping: ['slug' => 'slug'])] Course           $course,
+        #[MapEntity(mapping: ['nodeSlug' => 'slug'])] Node         $node,
         #[MapEntity(mapping: ['taskSlug' => 'slug'])] AbstractTask $task,
-        Request $request
+        Request                                                    $request
     ): Response
     {
         $prevTask = $task->getPreviousTask();
@@ -184,6 +188,7 @@ class TaskController extends AbstractBaseController
         );
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route(
         '/{slug}/{nodeSlug}/{taskSlug}/usun',
         name: 'task_delete',
