@@ -73,6 +73,11 @@ class ExperienceStatisticService implements ExperienceStatisticServiceInterface
 
     public function getLevelByExperience(int $experience): int
     {
+        // 1: 0 - 100
+        // 2: 100 - 300
+        // 3: 300 - 600
+        // 4: 600 - 1000
+
         $level = 1;
         $experienceForLevel = 100;
         while ($experience >= $experienceForLevel) {
@@ -84,11 +89,7 @@ class ExperienceStatisticService implements ExperienceStatisticServiceInterface
 
     public function getExperienceToLevelUp(int $level): int
     {
-        $experience = 100;
-        for ($i = 1; $i < $level; $i++) {
-            $experience += $i * 100;
-        }
-        return $experience;
+        return $level * 100;
     }
 
     public function getExperienceOnCurrentLevel(int $experience): int
