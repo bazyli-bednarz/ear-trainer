@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.taskError.index'|trans }}
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex gap-3 mb-5 mt-5 align-items-center">
+        <h1 class="custom-underline">{{ 'ui.page_header.taskError.index'|trans }}</h1>
+    </div>
+
+    <p class="mb-5">{{ 'ui.taskError.info'|trans }}</p>
+
+
+    {% if tasks|length > 0 %}
+        <div class="table-responsive">
+            <table class="tasks table table-striped table-dark">
+                <thead>
+                <tr>
+                    <th>{{ "ui.task.number"|trans }}</th>
+                    <th>{{ "ui.task.name"|trans }}</th>
+                    <th>{{ "ui.task.description"|trans }}</th>
+                    <th>{{ "ui.task.type"|trans }}</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tbody>
+                {% for task in tasks %}
+                    <tr class="task{% if loop.first %} first{% endif %}{% if loop.last %} last{% endif %}">
+                        <td>{{ loop.index }}.</td>
+                        <td>
+                            <a class="node-link"
+                               href="{{ url('task_show', {'slug': task.courseSlug, 'nodeSlug': task.nodeSlug, 'taskSlug': task.taskSlug }) }}"
+                            >
+                                <span class="task-name">{{ task.name }}</span>
+                            </a>
+                        </td>
+                        <td>
+                            {% if task.description %}
+                                <p class="task-description">{{ task.description }}</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ ('ui.taskType.' ~ task.type.value)|trans }}
+                        </td>
+                        <td>
+                            <a
+                                    href="{{ url('task_error_delete', {'slug': task.taskSlug}) }}"
+                                    class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                                {{ "ui.action.delete.taskError"|trans }}
+                            </a>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>{{ 'ui.taskError.noTasks'|trans }}</p>
+    {% endif %}
+{% endblock %}

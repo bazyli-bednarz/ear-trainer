@@ -29,6 +29,12 @@
                         url_path: 'ranking_index',
                         label: 'ui.sidebar.ranking.label',
                     } only %}
+                    {% include "partials/_menu-link.html.twig" with {
+                        id: 'taskError',
+                        icon: 'fa-solid fa-triangle-exclamation',
+                        url_path: 'task_error_index',
+                        label: 'ui.sidebar.taskError.label',
+                    } only %}
                 {% endif %}
             </ul>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Enum\UserRole;
+use App\Entity\Statistic\TaskError;
 use App\Entity\Statistic\TaskStatistic;
 use App\Entity\Trait\IdTrait;
 use App\Entity\Trait\TimestampableTrait;
@@ -62,10 +63,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Award::class, orphanRemoval: true)]
     private Collection $awards;
 
+    /**
+     * @var Collection<int, TaskError>
+     */
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: TaskError::class, orphanRemoval: true)]
+    private Collection $taskErrors;
+
     public function __construct()
     {
         $this->taskStatistics = new ArrayCollection();
         $this->awards = new ArrayCollection();
+        $this->taskErrors = new ArrayCollection();
     }
 
     public function getEmail(): ?string
@@ -216,6 +224,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($award->getUser() === $this) {
                 $award->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TaskError>
+     */
+    public function getTaskErrors(): Collection
+    {
+        return $this->taskErrors;
+    }
+
+    public function addTaskError(TaskError $taskError): static
+    {
+        if (!$this->taskErrors->contains($taskError)) {
+            $this->taskErrors->add($taskError);
+            $taskError->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskError(TaskError $taskError): static
+    {
+        if ($this->taskErrors->removeElement($taskError)) {
+            // set the owning side to null (unless already changed)
+            if ($taskError->getUser() === $this) {
+                $taskError->setUser(null);
             }
         }
 

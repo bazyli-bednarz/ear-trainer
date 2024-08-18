@@ -23,6 +23,8 @@ ui:
             edit: Aktualizacja danych
         ranking:
             index: Ranking
+        taskError:
+            index: Powtórka trudnych zadań
     sidebar:
         home:
             label: Strona główna
@@ -31,6 +33,8 @@ ui:
             about: O kursach
         ranking:
             label: Ranking
+        taskError:
+            label: Powtórka
     action:
         check: Sprawdź
         back_to_list:
@@ -49,6 +53,7 @@ ui:
             course: Usuń kurs
             node: Usuń lekcję
             task: Usuń
+            taskError: Usuń z listy powtórek
         login: Zaloguj się
         logout: Wyloguj się
         register: Zarejestruj się
@@ -66,6 +71,7 @@ ui:
             course: Kurs %name% został usunięty
             node: Lekcja %name% została usunięta
             task: Zadanie %name% zostało usunięte
+            taskError: Usunięto zadanie %name% z listy powtórek
         awarded: "Zdobywasz nagrodę: %name%! +%points% pkt!"
         form_error: Wystąpił błąd przy wypełnianiu formularza.
         finished:
@@ -81,6 +87,7 @@ ui:
             nameUpdated: Zaktualizowano nazwę użytkownika.
             oldPasswordWrong: Stare hasło jest nieprawidłowe.
             newPasswordEmpty: Nowe hasło nie może być puste.
+        taskNotFound: Zadanie nie zostało znalezione.
     course:
         name: Nazwa
         description: Opis
@@ -278,3 +285,6 @@ ui:
         totalExperience: Całkowita liczba punktów doświadczenia
         level: Poziom
         info: Ranking TOP 10 użytkowników, którzy zdobyli najwięcej punktów w aplikacji Ear trainer.
+    taskError:
+        info: W tej sekcji znajdziesz zadania, które sprawiły Ci trudność. Spróbuj je rozwiązać ponownie!
+        noTasks: Gratulacje! Nie masz żadnych zadań do powtórzenia.

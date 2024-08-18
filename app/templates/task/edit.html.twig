@@ -7,7 +7,7 @@
 {% block body %}
 
 
-    <div class="d-flex gap-3 mb-3 align-items-center">
+    <div class="d-flex gap-3 mb-5 mt-5 align-items-center">
         <h1>{{ 'ui.page_header.tasks.edit'|trans({"%name%": task.name }) }}</h1>
         {% if back_to_list_path|default(false) %}
             <a href="{{ url(back_to_list_path) }}" class="btn btn-link">

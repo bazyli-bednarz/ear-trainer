@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-flex gap-3 mb-3 align-items-center">
+    <div class="d-flex gap-3 mb-5 mt-5 align-items-center">
         <h1 class="custom-underline">{{ 'ui.page_header.courses.show'|trans({'%courseName%': course.name}) }}</h1>
         {% if is_granted("ROLE_ADMIN") %}
             <a href="{{ url('course_update', {'slug': course.slug}) }}" class="btn btn-primary">

@@ -30,6 +30,7 @@ use App\Service\Award\AwardServiceInterface;
 use App\Service\Course\CourseServiceInterface;
 use App\Service\Node\NodeServiceInterface;
 use App\Service\Statistic\ExperienceStatisticServiceInterface;
+use App\Service\Statistic\TaskErrorServiceInterface;
 use App\Service\Statistic\TaskStatisticServiceInterface;
 use App\Service\Task\TaskServiceInterface;
 use App\Service\TaskAnswer\TaskAnswerServiceInterface;
@@ -55,6 +56,7 @@ class TaskController extends AbstractBaseController
         private readonly TaskAnswerServiceInterface    $taskAnswerService,
         private readonly TaskStatisticServiceInterface $taskStatisticService,
         private readonly Security                      $security,
+        private readonly TaskErrorServiceInterface     $taskErrorService,
     )
     {
         parent::__construct($courseService, $translator, $experienceStatisticService, $awardService);
@@ -351,6 +353,10 @@ class TaskController extends AbstractBaseController
 
             if ($feedback->getIsCorrect() && !$nextTask) {
                 return $this->redirectToRoute('node_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug()]);
+            }
+
+            if ($feedback->getIsCorrect() === false) {
+                $this->taskErrorService->addTaskError($user, $task->getId());
             }
 
             return $this->redirectToRoute('task_show', ['slug' => $course->getSlug(), 'nodeSlug' => $node->getSlug(), 'taskSlug' => $task->getSlug()]);

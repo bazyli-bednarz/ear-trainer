@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="d-flex gap-3 mb-3 align-items-center">
+    <div class="d-flex gap-3 mb-5 mt-5 align-items-center">
         <h1>{{ 'ui.page_header.courses.index'|trans }}</h1>
         {% if is_granted("ROLE_ADMIN") %}
             <a href="{{ url('course_create') }}" class="btn btn-primary">
@@ -15,10 +15,12 @@
         {% endif %}
     </div>
 
+    <p class="mb-5 mt-5">
+        {{ 'ui.course.about'|trans }}
+    </p>
+
     <div class="container">
-        <p class="mb-5 mt-5">
-            {{ 'ui.course.about'|trans }}
-        </p>
+
         <div class="courses row gx-5">
             {% for course in courses %}
                 <div class="mb-3 col-12 col-md-4 col-lg-4">
