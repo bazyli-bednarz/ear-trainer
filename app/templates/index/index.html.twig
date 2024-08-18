@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="mb-3">{{ 'ui.page_header.index'|trans }}</h1>
+    <h1 class="mb-5 mt-5">{{ 'ui.page_header.index'|trans }}</h1>
     <p>{{ 'ui.index.info'|trans }}</p>
-    <p>{{ 'ui.index.info_masters_degree'|trans }}</p>
+    <p class="mb-5">{{ 'ui.index.info_masters_degree'|trans }}</p>
+    <img src="{{ asset('images/undraw_compose_music_re_wpiw.svg') }}" class="img-fluid m-auto d-block" alt="{{ 'ui.index.alt'|trans }}">
 {% endblock %}

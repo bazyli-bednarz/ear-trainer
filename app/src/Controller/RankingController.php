@@ -24,7 +24,7 @@ class RankingController extends AbstractBaseController
         parent::__construct($courseService, $translator, $experienceStatisticService, $awardService);
     }
 
-    #[Route('/top-punkty-doswiadczenia', name: 'ranking_index')]
+    #[Route(name: 'ranking_index', methods: ['GET'])]
     public function topExperience(Request $request): Response
     {
         $users = $this->experienceStatisticService->getTopExperienceUsers(10);

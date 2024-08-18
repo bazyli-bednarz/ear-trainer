@@ -20,6 +20,7 @@ ui:
         security:
             login: Logowanie
             register: Rejestracja
+            edit: Aktualizacja danych
         ranking:
             index: Ranking
     sidebar:
@@ -43,6 +44,7 @@ ui:
             course: Edytuj kurs
             node: Edytuj lekcję
             task: Edytuj
+            user: Edytuj dane
         delete:
             course: Usuń kurs
             node: Usuń lekcję
@@ -74,6 +76,11 @@ ui:
         alreadyHaveAccount: Masz już konto?
         dontHaveAccount: Nie masz jeszcze konta?
         successfulLogin: Zalogowano pomyślnie.
+        security:
+            updated: Zaktualizowano hasło.
+            nameUpdated: Zaktualizowano nazwę użytkownika.
+            oldPasswordWrong: Stare hasło jest nieprawidłowe.
+            newPasswordEmpty: Nowe hasło nie może być puste.
     course:
         name: Nazwa
         description: Opis
@@ -257,6 +264,10 @@ ui:
         password: Hasło
         username: Nazwa użytkownika
         agreeToTerms: Akceptuję regulamin użytkowania serwisu i Politykę Prywatności.
+        oldPassword: Stare hasło
+        newPassword: Nowe hasło
+        passwordRepeat: Powtórz nowe hasło
+        leaveBlank: Pozostaw puste, jeśli nie chcesz zmieniać hasła.
     award:
         CompletedFirstTask: Ukończono pierwsze zadanie
         CompletedFirstNode: Ukończono pierwszą lekcję

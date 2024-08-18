@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.security.edit'|trans }}
+{% endblock %}
+{% block body %}
+
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1>    {{ 'ui.page_header.security.edit'|trans }}</h1>
+    </div>
+
+
+    {{ form_start(form) }}
+    {% if false == form.vars.valid %}
+        {% include 'partials/_single_alert_message.html.twig' with {
+            type: 'danger',
+            message: 'message.form_error'|trans,
+        } %}
+    {% endif %}
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.username) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.oldPassword) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.newPassword) }}
+        </div>
+        <div class="col-12">
+            {{ form_row(form.submit) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
