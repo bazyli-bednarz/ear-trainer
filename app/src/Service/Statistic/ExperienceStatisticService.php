@@ -5,6 +5,7 @@ namespace App\Service\Statistic;
 use App\Dto\Task\TaskDto;
 use App\Dto\TaskAnswer\AnswerFeedbackDto;
 use App\Dto\TaskAnswer\TaskAnswerDto;
+use App\Dto\User\UserExperienceDto;
 use App\Entity\Enum\ThreeNoteChordTypeEnum;
 use App\Entity\Enum\TwoIntervalsTypeEnum;
 use App\Entity\Statistic\ExperienceStatistic;
@@ -12,6 +13,7 @@ use App\Entity\Statistic\TaskStatistic;
 use App\Entity\User;
 use App\Repository\Statistic\ExperienceStatisticRepository;
 use App\Repository\Statistic\TaskStatisticRepository;
+use App\Service\Award\AwardServiceInterface;
 use App\Service\TaskAnswer\TaskAnswerServiceInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\NonUniqueResultException;
@@ -37,7 +39,6 @@ class ExperienceStatisticService implements ExperienceStatisticServiceInterface
     public function __construct(
         private readonly ExperienceStatisticRepository $experienceStatisticRepository,
         private readonly EntityManagerInterface        $em,
-        private readonly TranslatorInterface           $translator,
     )
     {
     }
@@ -47,7 +48,7 @@ class ExperienceStatisticService implements ExperienceStatisticServiceInterface
     {
         try {
             return $this->experienceStatisticRepository->getExperienceByUser($user);
-        } catch (NoResultException | NonUniqueResultException $e) {
+        } catch (NoResultException|NonUniqueResultException $e) {
             return 0;
         }
     }
@@ -56,7 +57,7 @@ class ExperienceStatisticService implements ExperienceStatisticServiceInterface
     {
         try {
             return $this->experienceStatisticRepository->getExperienceInRange($user, $start, $end);
-        } catch (NoResultException | NonUniqueResultException $e) {
+        } catch (NoResultException|NonUniqueResultException $e) {
             return 0;
         }
     }
@@ -104,4 +105,23 @@ class ExperienceStatisticService implements ExperienceStatisticServiceInterface
 
         return $experience;
     }
+
+    public function getTopExperienceUsers(int $limit): array
+    {
+        $users = $this->experienceStatisticRepository->getTopExperienceUsers($limit);
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = new UserExperienceDto(
+                $user['id'],
+                $user['experience'],
+                $this->getLevelByExperience($user['experience']),
+                $user['username'],
+                $this->getExperienceOnCurrentLevel($user['experience']),
+                $this->getExperienceToLevelUp($this->getLevelByExperience($user['experience'])),
+        );
+        }
+
+        return $data;
+    }
+
 }

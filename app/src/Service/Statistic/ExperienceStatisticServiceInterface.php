@@ -17,4 +17,6 @@ interface ExperienceStatisticServiceInterface
     public function getLevelByExperience(int $experience): int;
     public function getExperienceOnCurrentLevel(int $experience): int;
     public function getExperienceToLevelUp(int $level): int;
+    public function getTopExperienceUsers(int $limit): array;
+
 }

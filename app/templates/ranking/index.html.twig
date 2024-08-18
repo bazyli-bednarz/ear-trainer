@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'ui.page_header.ranking.index'|trans }}
+{% endblock %}
+
+{% block body %}
+    <div class="d-flex gap-3 mb-3 align-items-center">
+        <h1 class="custom-underline">{{ 'ui.page_header.ranking.index'|trans }}</h1>
+    </div>
+
+    <p class="mt-5 mb-5">{{ 'ui.ranking.info'|trans }}</p>
+    {% if users|length > 0 %}
+        <div class="table-responsive">
+            <table class="users table table-striped table-dark align-middle">
+                <thead>
+                <tr>
+                    <th>{{ "ui.ranking.number"|trans }}</th>
+                    <th>{{ "ui.ranking.name"|trans }}</th>
+                    <th>{{ "ui.ranking.totalExperience"|trans }}</th>
+                    <th>{{ "ui.ranking.level"|trans }}</th>
+                </tr>
+                <tbody>
+                {% for user in users %}
+                    <tr class="user{% if loop.first %} first{% endif %}{% if loop.last %} last{% endif %}{% if user.id == app.user.id %} featured{% endif %}">
+                        <td>{{ loop.index }}.</td>
+                        <td>
+                            {% if user.username %}
+                                {{ user.username }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.experience %}
+                                {{ user.experience }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="level d-flex gap-1 me-3 align-items-center">
+                                <div class="level-number">
+                                    <i class="fa fa-star"></i>
+                                    <span>{{ user.level }}</span>
+                                </div>
+                                <div class="level-progress">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                             style="width: {{ user.currentExperience / user.experienceToLevelUp * 100 }}%"
+                                             aria-valuenow="{{ user.currentExperience }}" aria-valuemin="0"
+                                             aria-valuemax="{{ user.experienceToLevelUp }}"></div>
+                                    </div>
+                                    <div class="progress-tooltip">
+                                        {{ user.currentExperience }} / {{ user.experienceToLevelUp }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -20,6 +20,8 @@ ui:
         security:
             login: Logowanie
             register: Rejestracja
+        ranking:
+            index: Ranking
     sidebar:
         home:
             label: Strona główna
@@ -259,3 +261,9 @@ ui:
         CompletedFirstTask: Ukończono pierwsze zadanie
         CompletedFirstNode: Ukończono pierwszą lekcję
         CompletedFirstCourse: Ukończono pierwszy kurs
+    ranking:
+        number: LP
+        name: Nazwa użytkownika
+        totalExperience: Całkowita liczba punktów doświadczenia
+        level: Poziom
+        info: Ranking TOP 10 użytkowników, którzy zdobyli najwięcej punktów w aplikacji Ear trainer.

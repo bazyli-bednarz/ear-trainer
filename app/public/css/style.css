@@ -137,12 +137,14 @@ form .col-12 .row > div {
     transition: 0.3s;
 }
 
-.nodes .node-link:hover .node__inner > *{
+.nodes .node-link:hover .node__inner > *,
+.nodes .node-link:focus .node__inner > * {
     transform: translateY(-10px);
 }
 
 
-.nodes .node-link:hover .node__inner {
+.nodes .node-link:hover .node__inner,
+.nodes .node-link:focus .node__inner{
     filter: brightness(1.2);
 }
 
@@ -197,7 +199,8 @@ form .col-12 .row > div {
     transform: translateX(20%);
 }
 
-.nodes .node-link:hover .node-description {
+.nodes .node-link:hover .node-description,
+.nodes .node-link:focus .node-description {
     opacity: 1;
 }
 
@@ -215,7 +218,7 @@ form .col-12 .row > div {
 
 .nodes .inject-new-node {
     position: absolute;
-    top: calc(100% + clamp(25px, 5vw, 50px));
+    top: calc(100% + clamp(25px, 5vw, 50px) + 10px);
     font-size: 2rem;
     color: var(--custom-background-color);
     transform: translateY(-50%);
@@ -251,7 +254,8 @@ form .col-12 .row > div {
     right: 50%;
 }
 
-.nodes .inject-new-node:hover {
+.nodes .inject-new-node:hover,
+.nodes .inject-new-node:focus {
     filter: brightness(1.5);
 }
 
@@ -384,7 +388,8 @@ h1.custom-underline {
     align-items: center;
 }
 
-#play-button:hover {
+#play-button:hover,
+#play-button:focus {
     border-color: var(--success-color);
     color: var(--success-color);
 }
@@ -444,6 +449,10 @@ h1.custom-underline {
     cursor: pointer;
     width: 100%;
     text-align: center;
+}
+
+.answer .form-check input:focus ~ label{
+    outline: var(--primary-color) auto 5px;
 }
 
 .answer .form-check input {
@@ -613,7 +622,7 @@ h1.custom-underline {
     position: relative;
 }
 
-.level-progress .progress{
+.level-progress .progress {
     border-radius: 100vw;
     height: 0.8rem;
 }
@@ -639,4 +648,18 @@ h1.custom-underline {
     line-height: 1.3;
     text-wrap: nowrap;
     width: max-content;
+}
+
+.table.users > tbody .featured > td {
+    background: var(--primary-color);
+    color: var(--light-color);
+    box-shadow: none;
+}
+
+.featured .level-progress .progress {
+    box-shadow: 0 0 10px #fff;
+}
+
+.featured .level .fa-star {
+    text-shadow: 0 0 4px #fff;
 }

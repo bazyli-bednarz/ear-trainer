@@ -52,4 +52,16 @@ class ExperienceStatisticRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
     }
+
+    public function getTopExperienceUsers(int $limit): array
+    {
+        return $this->createQueryBuilder('es')
+            ->select('SUM(es.points) as experience', 'u.id', 'u.username')
+            ->join('es.user', 'u')
+            ->groupBy('u')
+            ->orderBy('experience', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }
